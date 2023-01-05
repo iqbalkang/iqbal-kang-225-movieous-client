@@ -4,6 +4,8 @@ import VerticalContainer from '../components/VerticalContainer'
 import Button from '../components/Button'
 import { postVerify } from '../apis/requests'
 import useNotification from '../hooks/useNotification'
+import useAuth from '../hooks/useAuth'
+import { ImSpinner2 } from 'react-icons/im'
 
 const OTP_LENGTH = 6
 let activeIndex = 0
@@ -14,7 +16,10 @@ const Verification = () => {
   const navigate = useNavigate()
   const { renderNotification } = useNotification()
 
-  const user = location.state?.user
+  const { verifyEmail, authInfo } = useAuth()
+  const { isLoading, error, success, user } = authInfo
+
+  const { userId } = location.state?.user
 
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(''))
   const [activeOtpIndex, setActiveOtpIndex] = useState(0)
@@ -53,20 +58,24 @@ const Verification = () => {
   }
 
   const handleSubmit = async () => {
-    if (!isValidOTP(otp)) renderNotification('error', 'invalid otp')
+    if (!isValidOTP(otp)) return renderNotification('error', 'invalid otp')
 
     const formattedOTP = otp.join('')
-    const info = { userId: user.userId, otp: formattedOTP }
+    const info = { userId, otp: formattedOTP }
 
-    const { data, error } = await postVerify(info)
+    await verifyEmail(info)
+  }
 
-    if (error) return renderNotification('error', error.message)
+  useEffect(() => {
+    if (error) return renderNotification('error', error)
 
-    if (data.status === 'success') {
-      renderNotification('success', data.message)
+    if (user) {
+      renderNotification('success', success)
       navigate('/')
     }
-  }
+  }, [user, error])
+
+  const renderButtonText = isLoading ? <ImSpinner2 className='animate-spin' /> : 'verify'
 
   return (
     <VerticalContainer>
@@ -90,7 +99,7 @@ const Verification = () => {
             )
           })}
         </div>
-        <Button onClick={handleSubmit}>Verify</Button>
+        <Button onClick={handleSubmit}> {renderButtonText} </Button>
         <Link to='/' className='mt-2 inline-block'>
           I don't have OTP
         </Link>

@@ -8,24 +8,7 @@ import FormRow from '../components/FormRow'
 import VerticalContainer from '../components/VerticalContainer'
 import useAuth from '../hooks/useAuth'
 import useNotification from '../hooks/useNotification'
-
-const validateUserInfo = userInfo => {
-  const { name, email, password } = userInfo
-
-  const isValidName = /^[A-Z a-z]+$/
-  const isValidEmail = /\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/
-
-  if (!name.trim()) return { valid: false, err: 'Please enter a name' }
-  if (!isValidName.test(name)) return { valid: false, err: 'Invalid name' }
-
-  if (!email.trim()) return { valid: false, err: 'Please enter an email' }
-  if (!isValidEmail.test(email)) return { valid: false, err: 'Invalid email' }
-
-  if (!password.trim()) return { valid: false, err: 'Please enter a password' }
-  if (password.length < 6) return { valid: false, err: 'Password has to be atleast 6 characters long' }
-
-  return { valid: true }
-}
+import validateUserInfo from '../utils/validateInputs'
 
 const Register = () => {
   const navigate = useNavigate()

@@ -1,7 +1,7 @@
 import React from 'react'
 import Input from './Input'
 
-const FormRow = ({ placeholder, name, type = 'text', label, value, onchange }) => {
+const FormRow = ({ placeholder, name, type = 'text', label, value, onchange, ...rest }) => {
   return (
     <div className='flex flex-col-reverse gap-1'>
       <Input
@@ -12,6 +12,7 @@ const FormRow = ({ placeholder, name, type = 'text', label, value, onchange }) =
         name={name}
         value={value}
         onchange={onchange}
+        {...rest}
       />
       <label
         htmlFor={name}

@@ -7,7 +7,7 @@ const postRegister = async userInfo => {
   } catch (error) {
     const { response } = error
     if (response?.data) return { error: response.data }
-    return error
+    return { error }
   }
 }
 
@@ -19,7 +19,7 @@ const postLogin = async userInfo => {
     console.log(error)
     const { response } = error
     if (response?.data) return { error: response.data }
-    return error
+    return { error }
   }
 }
 
@@ -30,8 +30,41 @@ const postVerify = async info => {
   } catch (error) {
     const { response } = error
     if (response?.data) return { error: response.data }
-    return error
+    return { error }
   }
 }
 
-export { postRegister, postVerify, postLogin }
+const postForgotPassword = async info => {
+  try {
+    const { data } = await customFetch.post('/auth/forgot-password', info)
+    return { data }
+  } catch (error) {
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+const postVerifyResetPasswordToken = async info => {
+  try {
+    const { data } = await customFetch.post('/auth/verify-reset-password-token', info)
+    return { data }
+  } catch (error) {
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+const postResetPassword = async info => {
+  try {
+    const { data } = await customFetch.post('/auth/reset-password', info)
+    return { data }
+  } catch (error) {
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export { postRegister, postVerify, postLogin, postForgotPassword, postVerifyResetPasswordToken, postResetPassword }

@@ -1,4 +1,4 @@
-import { postLogin } from '../apis/requests'
+import { postLogin, postVerify } from '../apis/requests'
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../utils/localStorage'
 
 const { useState, createContext } = require('react')
@@ -9,6 +9,7 @@ const initialState = {
   user: getLocalStorage('user'),
   isLoading: false,
   error: '',
+  success: '',
 }
 
 const AuthProvider = ({ children }) => {
@@ -25,12 +26,23 @@ const AuthProvider = ({ children }) => {
     setLocalStorage('user', data.user)
   }
 
+  const verifyEmail = async userInfo => {
+    setAuthInfo({ ...initialState, isLoading: true })
+
+    const { data, error } = await postVerify(userInfo)
+
+    if (error) return setAuthInfo({ ...initialState, isLoading: false, error: error.message })
+
+    setAuthInfo({ ...initialState, isLoading: false, user: data.user, success: data.message })
+    setLocalStorage('user', data.user)
+  }
+
   const logout = () => {
     removeLocalStorage('user')
     setAuthInfo(initialState)
   }
 
-  return <AuthContext.Provider value={{ authInfo, signIn, logout }}> {children} </AuthContext.Provider>
+  return <AuthContext.Provider value={{ authInfo, signIn, verifyEmail, logout }}> {children} </AuthContext.Provider>
 }
 
 export { AuthContext }

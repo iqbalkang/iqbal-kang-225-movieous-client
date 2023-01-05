@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
-import ConfirmPassword from './pages/ConfirmPassword'
+import ResetPassword from './pages/ResetPassword'
+import ForgotPassword from './pages/ForgotPassword'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -13,7 +14,8 @@ function App() {
           <Route path='login' element={<Login />} />
           <Route path='register' element={<Register />} />
           <Route path='verification' element={<Verification />} />
-          <Route path='confirm-password' element={<ConfirmPassword />} />
+          <Route path='forgot-password' element={<ForgotPassword />} />
+          <Route path='reset-password' element={<ResetPassword />} />
         </Route>
       </Routes>
     </div>
