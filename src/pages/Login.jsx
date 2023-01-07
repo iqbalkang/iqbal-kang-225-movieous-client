@@ -51,7 +51,7 @@ const Login = () => {
     <VerticalContainer>
       <AuthCard title='Login'>
         <Form onSubmit={handleSubmit}>
-          <FormRow placeholder='johndoe@gmail.com' name='email' value={email} onchange={changeHandler} /> kw
+          <FormRow placeholder='johndoe@gmail.com' name='email' value={email} onchange={changeHandler} />
           <FormRow placeholder='******' type='password' name='password' value={password} onchange={changeHandler} />
           <Button> {renderButtonText} </Button>
           <div className='flex justify-between'>
