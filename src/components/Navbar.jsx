@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../images/logo.png'
-import { HiOutlineSun, HiSun } from 'react-icons/hi'
+// import { HiOutlineSun, HiSun } from 'react-icons/hi'
 import Container from './Container'
 import Input from './Input'
 import useTheme from '../hooks/useTheme'
 import useAuth from '../hooks/useAuth'
+import Search from './Search'
+import ThemeToggler from './ThemeToggler'
 
 const Navbar = () => {
   const navigate = useNavigate()
 
-  const { toggleTheme, darkMode } = useTheme()
+  // const { toggleTheme, darkMode } = useTheme()
   const { authInfo, logout } = useAuth()
   const { user } = authInfo
 
@@ -19,7 +21,7 @@ const Navbar = () => {
     navigate('/')
   }
 
-  const renderThemeIcon = () => (darkMode ? <HiOutlineSun size={26} /> : <HiSun size={26} />)
+  // const renderThemeIcon = () => (darkMode ? <HiOutlineSun size={26} /> : <HiSun size={26} />)
 
   const renderAuthButton = user ? (
     <button className='capitalize' onClick={handleLogout}>
@@ -40,8 +42,9 @@ const Navbar = () => {
           </Link>
 
           <div className='flex items-center gap-4'>
-            <button onClick={toggleTheme}> {renderThemeIcon()} </button>
-            <Input placeholder='search...' className='md:focus:w-80' />
+            {/* <button onClick={toggleTheme}> {renderThemeIcon()} </button> */}
+            <ThemeToggler />
+            <Search placeholder='search' />
             {renderAuthButton}
           </div>
         </div>
