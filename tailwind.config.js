@@ -8,6 +8,7 @@ module.exports = {
         body: '#0E1428',
         background: '#101419',
         accent: '#823038',
+        modal: '#1c2648',
         ['custom-yellow']: '#FCD757',
       },
     },
