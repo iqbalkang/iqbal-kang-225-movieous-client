@@ -10,7 +10,7 @@ const InnerModal = ({ children, closeModal }) => {
       className='absolute inset-0 flex items-center justify-center backdrop-blur-md z-30 cursor-pointer backdrop2'
       onClick={handleModal}
     >
-      <div className='bg-custom-yellow h-20 w-20 cursor-auto'>{children}</div>
+      <div className='dark:bg-background cursor-auto p-4 text-white'>{children}</div>
     </div>
   )
 }

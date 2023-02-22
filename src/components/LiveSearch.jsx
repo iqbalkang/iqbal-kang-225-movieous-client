@@ -1,14 +1,15 @@
-import React, { useState, useRef } from 'react'
-import { useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { searchActor } from '../apis/actor'
 import Modal from './Modal'
 
-const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWritersModal }) => {
+const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWritersModal, resetInput }) => {
   const resultRef = useRef()
   const inputRef = useRef()
   const [resultsVisible, setResultsVisible] = useState(false)
   const [focusedIndex, setFocusedIndex] = useState(-1)
   const [input, setInput] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
+  const [actors, setActors] = useState([])
 
   const handleOnFocus = () => setResultsVisible(true)
   const handleOnBlur = e => {
@@ -16,6 +17,19 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
       setResultsVisible(false)
     }, [100])
   }
+
+  useEffect(() => {
+    setInput('')
+  }, [resetInput])
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const { data } = await searchActor(input)
+      setActors(data.actors)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [input])
 
   const handleOnClick = result => {
     onClick(result)
@@ -54,7 +68,7 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
     }
   }
 
-  const renderResultsFields = results.map((result, index) => {
+  const renderResultsFields = actors.map((result, index) => {
     return (
       <ResultField
         key={index}
@@ -75,9 +89,10 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
     <div className='relative'>
       {name === 'writers' && (
         <button
-          className='absolute right-0 dark:text-white capitalize text-xs'
+          className='absolute right-0 dark:text-white capitalize text-xs dark:disabled:text-[#aaa] disabled:cursor-not-allowed'
           type='button'
           onClick={handleButtonClick}
+          disabled={writers.length === 0}
         >
           view all
         </button>
@@ -116,7 +131,7 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
 
 const ResultsContainer = ({ children }) => {
   return (
-    <div className='absolute z-20 left-0 right-0 mt-2 h-48 rounded overflow-hidden overflow-y-scroll  shadow-md bg-[#aaa] dark:bg-background dark:text-white'>
+    <div className='absolute z-20 left-0 right-0 mt-2 rounded overflow-hidden overflow-y-scroll  shadow-md bg-[#aaa] dark:bg-background dark:text-white'>
       {children}
     </div>
   )
@@ -126,7 +141,9 @@ const ResultField = ({ result, onClick, index, focusedIndex, resultRef }) => {
   useEffect(() => {
     resultRef.current?.scrollIntoView({ block: 'center' })
   }, [focusedIndex])
-  const { avatar, name } = result
+
+  const { image, name } = result
+
   return (
     <div
       ref={index === focusedIndex ? resultRef : null}
@@ -135,7 +152,7 @@ const ResultField = ({ result, onClick, index, focusedIndex, resultRef }) => {
       } flex items-center capitalize gap-3 p-1 hover:bg-white dark:hover:bg-[#aaa] cursor-pointer`}
       onClick={onClick.bind(null, result)}
     >
-      <img src={avatar} alt='' className='w-14 h-14 object-cover rounded-full' />
+      <img src={image.url} alt='' className='w-14 h-14 object-cover rounded-full' />
       <p>{name}</p>
     </div>
   )

@@ -11,7 +11,7 @@ const Modal = ({ children, closeModal }) => {
       className='absolute inset-0 flex justify-center items-center bg-body bg-opacity-50 backdrop-blur-sm z-10 cursor-pointer backdrop'
       onClick={handleMovieModal}
     >
-      <div className='fixed rounded bg-white dark:bg-modal w-[35rem] h-[30rem] shadow-md cursor-auto'>{children}</div>
+      {children}
     </div>,
     document.getElementById('modal')
   )

@@ -5,12 +5,15 @@ import { IoAddOutline } from 'react-icons/io5'
 import Modal from './Modal'
 import MovieForm from './MovieForm'
 import UploadTrailer from './UploadTrailer'
+import ActorForm from './ActorForm'
 
 const AuthHeader = () => {
   const [createButton, setCreateButton] = useState(false)
-  const [movieModal, setMovieModal] = useState(true)
+  const [movieModal, setMovieModal] = useState(false)
+  const [actorModal, setActorModal] = useState(true)
 
   const handleMovieModal = () => setMovieModal(prevState => !prevState)
+  const handleActorModal = () => setActorModal(prevState => !prevState)
 
   const toggleCreateButton = () => setCreateButton(prevState => !prevState)
 
@@ -24,9 +27,15 @@ const AuthHeader = () => {
   return (
     <header className='flex justify-between items-center'>
       {movieModal && (
-        <Modal visible={movieModal} closeModal={handleMovieModal}>
+        <Modal closeModal={handleMovieModal}>
           {/* <UploadTrailer /> */}
           <MovieForm />
+        </Modal>
+      )}
+
+      {actorModal && (
+        <Modal closeModal={handleActorModal}>
+          <ActorForm closeModal={handleActorModal} />
         </Modal>
       )}
 
@@ -45,7 +54,10 @@ const AuthHeader = () => {
           </button>
           {createButton && (
             <div className='absolute right-0 top-[110%] bg-gray-800 w-[100px]' ref={menuRef}>
-              <button className='py-1 border-b border-[#aaa] w-full hover:bg-gray-500 hover:text-white'>
+              <button
+                className='py-1 border-b border-[#aaa] w-full hover:bg-gray-500 hover:text-white'
+                onClick={handleActorModal}
+              >
                 Add Actor
               </button>
               <button className='py-1 hover:bg-gray-500 w-full hover:text-white' onClick={handleMovieModal}>
