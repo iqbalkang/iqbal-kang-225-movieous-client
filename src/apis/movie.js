@@ -15,4 +15,16 @@ const postTrailer = async (trailer, setUploadProgress) => {
   }
 }
 
-export { postTrailer }
+const postMovie = async movieInfo => {
+  try {
+    const { data } = await customFetch.post(`/movie`, movieInfo)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export { postTrailer, postMovie }

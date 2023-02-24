@@ -47,11 +47,11 @@ const CastForm = ({ onClick, cast, toggleWritersModal, modal, deleteCast }) => {
 
   const renderCast = () => {
     return cast.map((member, index) => {
-      const { avatar, name } = member.actor
+      const { image, name } = member.actor
       return (
         <div className='flex items-center gap-8 justify-between' key={index}>
           <div className='flex items-center gap-2'>
-            <img src={avatar} alt='' className='h-12 w-12 bg-red-400 object-cover rounded-full' />
+            <img src={image.url} alt='' className='h-12 w-12 bg-red-400 object-cover rounded-full' />
             <div>
               <p className='capitalize whitespace-nowrap'>{name}</p>
               {member.leadActor && (

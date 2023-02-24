@@ -8,10 +8,12 @@ const Modal = ({ children, closeModal }) => {
 
   return ReactDOM.createPortal(
     <div
-      className='absolute inset-0 flex justify-center items-center bg-body bg-opacity-50 backdrop-blur-sm z-10 cursor-pointer backdrop'
+      className='absolute inset-0 flex flex-col justify-center items-center bg-body bg-opacity-50 backdrop-blur-sm z-10 cursor-pointer backdrop'
       onClick={handleMovieModal}
     >
-      {children}
+      <div className='fixed py-6 rounded bg-white dark:bg-modal w-[40rem] h-[35rem] shadow-md cursor-auto overflow-y-scroll'>
+        {children}
+      </div>
     </div>,
     document.getElementById('modal')
   )

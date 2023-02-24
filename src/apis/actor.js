@@ -13,7 +13,6 @@ const postActor = async actorInfo => {
 }
 
 const searchActor = async actor => {
-  console.log(actor)
   try {
     const { data } = await customFetch.get(`/actor/search?name=${actor}`)
     return { data }

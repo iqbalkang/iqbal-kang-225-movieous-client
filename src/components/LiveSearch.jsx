@@ -25,6 +25,7 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
   useEffect(() => {
     const timer = setTimeout(async () => {
       const { data } = await searchActor(input)
+      console.log(data)
       setActors(data.actors)
     }, 300)
 

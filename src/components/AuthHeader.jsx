@@ -6,16 +6,38 @@ import Modal from './Modal'
 import MovieForm from './MovieForm'
 import UploadTrailer from './UploadTrailer'
 import ActorForm from './ActorForm'
+import { postTrailer } from '../apis/movie'
+import ProgressBar from './ProgressBar'
 
 const AuthHeader = () => {
   const [createButton, setCreateButton] = useState(false)
   const [movieModal, setMovieModal] = useState(false)
-  const [actorModal, setActorModal] = useState(true)
+  const [actorModal, setActorModal] = useState(false)
 
   const handleMovieModal = () => setMovieModal(prevState => !prevState)
   const handleActorModal = () => setActorModal(prevState => !prevState)
-
   const toggleCreateButton = () => setCreateButton(prevState => !prevState)
+
+  const [videoSelected, setVideoSelected] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [videoUploaded, setVideoUploaded] = useState(false)
+  const [trailerInfo, setTrailerInfo] = useState({})
+
+  const handleChange = async file => {
+    setVideoSelected(true)
+    const trailer = new FormData()
+    trailer.append('trailer', file)
+
+    const { data } = await postTrailer(trailer, setUploadProgress)
+    setTrailerInfo(data)
+    setVideoUploaded(true)
+  }
+
+  const toggleVideoStates = () => {
+    setVideoSelected(false)
+    setUploadProgress(0)
+    setVideoUploaded(false)
+  }
 
   const menuRef = useRef()
   const buttonRef = useRef()
@@ -28,8 +50,14 @@ const AuthHeader = () => {
     <header className='flex justify-between items-center'>
       {movieModal && (
         <Modal closeModal={handleMovieModal}>
-          {/* <UploadTrailer /> */}
-          <MovieForm />
+          <UploadTrailer handleChange={handleChange} visible={videoSelected} />
+          <ProgressBar videoUploaded={videoUploaded} videoSelected={videoSelected} uploadProgress={uploadProgress} />
+          <MovieForm
+            visible={videoSelected}
+            trailer={trailerInfo}
+            closeModal={handleMovieModal}
+            toggleVideoStates={toggleVideoStates}
+          />
         </Modal>
       )}
 
