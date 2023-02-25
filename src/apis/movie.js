@@ -27,4 +27,16 @@ const postMovie = async movieInfo => {
   }
 }
 
-export { postTrailer, postMovie }
+const getMovies = async (page, limit) => {
+  try {
+    const { data } = await customFetch.get(`/movie?page=${page}$limit=${limit}`)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export { postTrailer, postMovie, getMovies }

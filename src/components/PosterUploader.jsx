@@ -7,7 +7,7 @@ const PosterUploader = ({ onChange, selectedPoster }) => {
         type='file'
         id='poster'
         name='poster'
-        accept='image/jpg, image/jpeg, image/png'
+        accept='image/jpg, image/jpeg, image/png, image/webp'
         hidden
         onChange={onChange}
       />

@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import AdminHome from './AdminHome'
 import Movies from './Movies'
 import Actors from './Actors'
+import AdminDashboard from './AdminDashboard'
 
 const AdminRouter = () => {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ const AdminRouter = () => {
     <div className='dark:bg-body bg-white text-[#555] dark:text-[#ddd] min-h-screen'>
       <Routes>
         <Route path='/' element={<AdminHome />}>
+          <Route index element={<AdminDashboard />} />
           <Route path='movies' element={<Movies />} />
           <Route path='actors' element={<Actors />} />
         </Route>

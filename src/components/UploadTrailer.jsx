@@ -8,7 +8,7 @@ import ProgressBar from './ProgressBar'
 
 const UploadTrailer = ({ handleChange, visible }) => {
   const { renderNotification } = useNotification()
-  const fileTypes = ['mp4', 'avi']
+  const fileTypes = ['mp4', 'avi', 'mkv']
 
   if (visible) return null
 

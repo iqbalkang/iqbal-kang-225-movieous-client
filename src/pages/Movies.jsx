@@ -1,33 +1,22 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { searchActor } from '../apis/actor'
+import React, { useState, useEffect } from 'react'
+import { getMovies } from '../apis/movie'
+import Movie from '../components/Movie'
 
 const Movies = () => {
-  const [input, setInput] = useState('')
+  const [movies, setMovies] = useState([])
 
-  const handleChange = async e => {
-    const { name, value } = e.target
-
-    setInput(value)
-
-    // const { data } = await searchActor(input)
-    // console.log(data)
+  const fetchMovies = async () => {
+    const { data, error } = await getMovies(0, 2)
+    setMovies(data.movies)
   }
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      const { data } = await searchActor(input)
-      console.log(data)
-    }, 2000)
+    fetchMovies()
+  }, [])
 
-    return () => clearTimeout(timer)
-  }, [input])
+  const renderMovies = () => movies.map(movie => <Movie key={movie._id} movie={movie} />)
 
-  return (
-    <div>
-      <input type='text' onChange={handleChange} value={input} className='text-black' />
-    </div>
-  )
+  return <div>{renderMovies()}</div>
 }
 
 export default Movies
