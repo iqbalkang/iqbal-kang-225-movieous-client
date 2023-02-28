@@ -2,6 +2,8 @@ import React from 'react'
 import { MdDeleteOutline, MdOutlineModeEditOutline, MdOpenInFull } from 'react-icons/md'
 
 const Movie = ({ movie }) => {
+  const handleOnEditClick = () => {}
+
   const { title, genre = [], status, poster } = movie
   return (
     <div className='flex gap-4 items-center py-2'>
@@ -24,7 +26,7 @@ const Movie = ({ movie }) => {
         <button>
           <MdDeleteOutline />
         </button>
-        <button>
+        <button onClick={handleOnEditClick.bind(null, movie._id)}>
           <MdOutlineModeEditOutline />
         </button>
         <button>

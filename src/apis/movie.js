@@ -27,9 +27,21 @@ const postMovie = async movieInfo => {
   }
 }
 
+// const updateMovie = async movieInfo => {
+//   try {
+//     const { data } = await customFetch.post(`/movie`, movieInfo)
+//     return { data }
+//   } catch (error) {
+//     console.log(error)
+//     const { response } = error
+//     if (response?.data) return { error: response.data }
+//     return { error }
+//   }
+// }
+
 const getMovies = async (page, limit) => {
   try {
-    const { data } = await customFetch.get(`/movie?page=${page}$limit=${limit}`)
+    const { data } = await customFetch.get(`/movie?page=${page}&limit=${limit}`)
     return { data }
   } catch (error) {
     console.log(error)

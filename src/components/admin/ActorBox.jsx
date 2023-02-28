@@ -4,7 +4,11 @@ import { MdDeleteOutline, MdOutlineModeEditOutline } from 'react-icons/md'
 
 const overlayButtonClasses = 'bg-white h-8 w-8 rounded-full flex justify-center items-center'
 
-const ActorBox = ({ actor }) => {
+const ActorBox = ({ actor, handleEdit }) => {
+  const handleOnEdit = actor => {
+    handleEdit(actor)
+  }
+
   const { name, about = '', image } = actor
   return (
     <Box className='relative group'>
@@ -23,7 +27,7 @@ const ActorBox = ({ actor }) => {
           <MdDeleteOutline color='red' />
         </button>
         <button className={overlayButtonClasses}>
-          <MdOutlineModeEditOutline color='blue' />
+          <MdOutlineModeEditOutline color='blue' onClick={handleOnEdit.bind(null, actor)} />
         </button>
       </div>
     </Box>

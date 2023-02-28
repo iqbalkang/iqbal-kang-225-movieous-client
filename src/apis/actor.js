@@ -12,6 +12,18 @@ const postActor = async actorInfo => {
   }
 }
 
+const updateActor = async (id, actorInfo) => {
+  try {
+    const { data } = await customFetch.put(`/actor/${id}`, actorInfo)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
 const getActors = async (page, limit) => {
   try {
     const { data } = await customFetch.get(`/actor?page=${page}&limit=${limit}`)
@@ -36,4 +48,4 @@ const searchActor = async actor => {
   }
 }
 
-export { postActor, searchActor, getActors }
+export { postActor, searchActor, getActors, updateActor }

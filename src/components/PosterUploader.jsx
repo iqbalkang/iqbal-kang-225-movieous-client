@@ -15,7 +15,7 @@ const PosterUploader = ({ onChange, selectedPoster }) => {
         {selectedPoster ? (
           <img src={selectedPoster} className='rounded' />
         ) : (
-          <div className='border border-[#aaa] border-dashed h-24 flex justify-center items-center rounded'>
+          <div className='border border-[#aaa] border-dashed h-36 flex justify-center items-center rounded'>
             <p>Select Poster</p>
           </div>
         )}

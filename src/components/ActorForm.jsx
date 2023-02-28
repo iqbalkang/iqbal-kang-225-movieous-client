@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { postActor } from '../apis/actor'
+import React, { useState, useEffect } from 'react'
+import { postActor, updateActor } from '../apis/actor'
 import { genderOptions } from '../utils/options'
 import PosterUploader from './PosterUploader'
 import Select from './Select'
@@ -17,7 +17,7 @@ const defaultActorInfo = {
   name: '',
 }
 
-const ActorForm = ({ closeModal }) => {
+const ActorForm = ({ closeModal, selectedProfile, handleEditSubmit }) => {
   const { renderNotification } = useNotification()
   const [actorInfo, setActorInfo] = useState(defaultActorInfo)
   const [selectedPoster, setSelectedPoster] = useState('')
@@ -45,6 +45,18 @@ const ActorForm = ({ closeModal }) => {
       formData.append(key, actorInfo[key])
     }
 
+    if (selectedProfile) {
+      const { data, error } = await updateActor(selectedProfile.actorId, formData)
+      setLoading(false)
+      if (data) {
+        renderNotification('success', 'Actor updated successfully')
+        handleEditSubmit(data.actor)
+      }
+
+      if (error) renderNotification('error', error)
+      return closeModal()
+    }
+
     const { data, error } = await postActor(formData)
     setLoading(false)
     if (data) renderNotification('success', 'Actor created successfully')
@@ -52,13 +64,22 @@ const ActorForm = ({ closeModal }) => {
     closeModal()
   }
 
+  useEffect(() => {
+    if (selectedProfile) {
+      setActorInfo({ ...selectedProfile })
+      setSelectedPoster(selectedProfile.image)
+    }
+  }, [selectedProfile])
+
   return (
     <div className={modalContainerClasses}>
       <form onSubmit={handleSubmit}>
         <div className=' flex justify-between mb-4'>
-          <h2 className='text-xl capitalize text-white'>create new actor</h2>
+          <h2 className='text-xl capitalize dark:text-white'>
+            {selectedProfile ? 'Update actor' : 'create new actor'}
+          </h2>
           <button className=' bg-custom-yellow w-24 rounded capitalize flex justify-center items-center'>
-            {loading ? <ImSpinner2 className='animate-spin' /> : 'create'}
+            {loading ? <ImSpinner2 className='animate-spin' /> : selectedProfile ? 'update' : 'create'}
           </button>
         </div>
 
@@ -76,7 +97,7 @@ const ActorForm = ({ closeModal }) => {
             />
             <textarea
               name='about'
-              className={inputsClasses + ' resize-none'}
+              className={inputsClasses + ' resize-none h-24'}
               placeholder='about the actor'
               value={actorInfo.about}
               onChange={handleOnChange}

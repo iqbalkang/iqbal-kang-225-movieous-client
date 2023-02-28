@@ -62,7 +62,7 @@ const AuthHeader = () => {
       )}
 
       {actorModal && (
-        <Modal closeModal={handleActorModal}>
+        <Modal closeModal={handleActorModal} className='h-auto w-auto px-6'>
           <ActorForm closeModal={handleActorModal} />
         </Modal>
       )}
