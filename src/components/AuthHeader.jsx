@@ -8,8 +8,10 @@ import UploadTrailer from './UploadTrailer'
 import ActorForm from './ActorForm'
 import { postTrailer } from '../apis/movie'
 import ProgressBar from './ProgressBar'
+import { useNavigate } from 'react-router-dom'
 
 const AuthHeader = () => {
+  const navigate = useNavigate()
   const [createButton, setCreateButton] = useState(false)
   const [movieModal, setMovieModal] = useState(false)
   const [actorModal, setActorModal] = useState(false)
@@ -29,6 +31,7 @@ const AuthHeader = () => {
     trailer.append('trailer', file)
 
     const { data } = await postTrailer(trailer, setUploadProgress)
+    // console.log(data)
     setTrailerInfo(data)
     setVideoUploaded(true)
   }
@@ -45,6 +48,14 @@ const AuthHeader = () => {
   window.addEventListener('click', e => {
     if (e.target !== menuRef.current && e.target !== buttonRef.current) setCreateButton(false)
   })
+
+  const handleSearchSubmit = query => {
+    navigate(`/search?title=${query}`)
+  }
+
+  const handleSearchReset = () => {
+    navigate(-1)
+  }
 
   return (
     <header className='flex justify-between items-center'>
@@ -67,7 +78,7 @@ const AuthHeader = () => {
         </Modal>
       )}
 
-      <Search placeholder='search movies' />
+      <Search placeholder='search movies' onSubmit={handleSearchSubmit} onReset={handleSearchReset} />
 
       <div className='flex gap-2'>
         <ThemeToggler />

@@ -4,6 +4,7 @@ import AdminHome from './AdminHome'
 import Movies from './Movies'
 import Actors from './Actors'
 import AdminDashboard from './AdminDashboard'
+import MovieSearch from './MovieSearch'
 
 const AdminRouter = () => {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ const AdminRouter = () => {
           <Route index element={<AdminDashboard />} />
           <Route path='movies' element={<Movies />} />
           <Route path='actors' element={<Actors />} />
+          <Route path='search' element={<MovieSearch />} />
         </Route>
       </Routes>
     </div>

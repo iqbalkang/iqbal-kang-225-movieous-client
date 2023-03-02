@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { IoMdClose } from 'react-icons/io'
 
-const Tags = ({ updateTags }) => {
+const Tags = ({ updateTags, selectedTags }) => {
   const tagRef = useRef()
   const divRef = useRef()
   const labelRef = useRef()
   const [tag, setTag] = useState('')
   const [tags, setTags] = useState([])
+  const [firstRender, setFirstRender] = useState(true)
 
   const handleOnChange = e => {
     const { value } = e.target
@@ -45,6 +46,11 @@ const Tags = ({ updateTags }) => {
     divRef.current.classList.remove('border-black', 'dark:border-white')
     labelRef.current.classList.remove('text-[#000]', 'dark:text-white')
   }
+
+  useEffect(() => {
+    if (firstRender && !tags.length) return setTags(selectedTags)
+    if (tags.length) return setFirstRender(false)
+  }, [selectedTags])
 
   useEffect(() => {
     updateTags(tags)

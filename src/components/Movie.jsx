@@ -1,8 +1,10 @@
 import React from 'react'
 import { MdDeleteOutline, MdOutlineModeEditOutline, MdOpenInFull } from 'react-icons/md'
 
-const Movie = ({ movie }) => {
-  const handleOnEditClick = () => {}
+const Movie = ({ movie, onEdit }) => {
+  const handleOnEditClick = id => {
+    onEdit(id)
+  }
 
   const { title, genre = [], status, poster } = movie
   return (

@@ -47,6 +47,7 @@ const CastForm = ({ onClick, cast, toggleWritersModal, modal, deleteCast }) => {
 
   const renderCast = () => {
     return cast.map((member, index) => {
+      console.log(member)
       const { image, name } = member.actor
       return (
         <div className='flex items-center gap-8 justify-between' key={index}>
@@ -69,7 +70,7 @@ const CastForm = ({ onClick, cast, toggleWritersModal, modal, deleteCast }) => {
 
   return (
     <div className='dark:text-white'>
-      {modal && cast.length > 0 && (
+      {modal && cast?.length > 0 && (
         <InnerModal closeModal={toggleWritersModal}>
           <div className='space-y-4'>{renderCast()}</div>
         </InnerModal>
@@ -91,7 +92,7 @@ const CastForm = ({ onClick, cast, toggleWritersModal, modal, deleteCast }) => {
           className='text-xs capitalize dark:disabled:text-[#aaa] disabled:cursor-not-allowed'
           type='button'
           onClick={handleButtonClick}
-          disabled={cast.length === 0}
+          disabled={cast?.length === 0}
         >
           view all
         </button>

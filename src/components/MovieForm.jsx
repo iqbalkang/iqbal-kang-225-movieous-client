@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Tags from './Tags'
 import { results } from '../utils/fakeData'
 import LiveSearch from './LiveSearch'
@@ -12,7 +12,7 @@ import GenreModal from './GenreModal'
 import Select from './Select'
 import options, { languageOptions, statusOptions, typeOptions } from '../utils/options'
 import useNotification from '../hooks/useNotification'
-import { postMovie } from '../apis/movie'
+import { postMovie, updateMovie } from '../apis/movie'
 import validateMovie from '../utils/validateMovie'
 import { ImSpinner2 } from 'react-icons/im'
 
@@ -32,7 +32,7 @@ const defaultMovieInfo = {
   trailer: {},
 }
 
-const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
+const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoStates }) => {
   const { renderNotification } = useNotification()
 
   const [movieInfo, setMovieInfo] = useState(defaultMovieInfo)
@@ -98,24 +98,23 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
 
     setUploading(true)
 
-    const { tags, genre, cast, director, writers } = movieInfo
+    const { tags, genre, cast, director, writers, poster } = movieInfo
 
     const formData = new FormData()
 
     const updatedMovieInfo = { ...movieInfo }
     updatedMovieInfo.genre = JSON.stringify(genre)
     updatedMovieInfo.tags = JSON.stringify(tags)
-    if (director) updatedMovieInfo.director = director._id
-
+    if (director) updatedMovieInfo.director = director._id || director.actorId
     if (writers.length) {
-      const finalWriters = writers.map(writer => writer._id)
+      const finalWriters = writers.map(writer => writer._id || writer.actorId)
       updatedMovieInfo.writers = JSON.stringify(finalWriters)
     }
 
-    if (cast.length) {
+    if (cast?.length) {
       const finalCast = cast.map(c => {
         return {
-          actor: c.actor._id,
+          actor: c.actor?._id,
           roleAs: c.roleAs,
           leadActor: c.leadActor,
         }
@@ -124,10 +123,22 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
       updatedMovieInfo.cast = JSON.stringify(finalCast)
     }
 
-    if (trailer) updatedMovieInfo.trailer = JSON.stringify(trailer)
+    console.log(movieInfo.trailer)
+    if (movieInfo.trailer || trailer) updatedMovieInfo.trailer = JSON.stringify(trailer || movieInfo.trailer)
+    if (poster?.url) updatedMovieInfo.poster = JSON.stringify(poster)
 
     for (let key in updatedMovieInfo) {
+      console.log(key, updatedMovieInfo[key])
       formData.append(key, updatedMovieInfo[key])
+    }
+
+    if (selectedMovie) {
+      const { data, err } = await updateMovie(selectedMovie._id, formData)
+      setUploading(false)
+      if (err) return renderNotification('error', err)
+      if (data) renderNotification('success', 'Movie updated successfully')
+      return closeModal()
+      // return toggleVideoStates()
     }
 
     const { data, err } = await postMovie(formData)
@@ -138,6 +149,15 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
     closeModal()
     toggleVideoStates()
   }
+
+  useEffect(() => {
+    if (selectedMovie) {
+      setMovieInfo({ ...selectedMovie })
+      setSelectedPoster(selectedMovie.poster.url)
+    }
+  }, [selectedMovie])
+
+  console.log(movieInfo)
 
   const renderWriters = () => {
     return movieInfo.writers.map((writer, index) => {
@@ -165,7 +185,7 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
         className='grid grid-cols-[70%,30%] p-2 px-6 gap-4 relative min-h-full place-content-center'
         onSubmit={handleSubmit}
       >
-        {writersModal && movieInfo.writers.length > 0 && (
+        {writersModal && movieInfo.writers?.length > 0 && (
           <InnerModal closeModal={toggleWritersModal}>
             <div className='space-y-4'>{renderWriters()}</div>
           </InnerModal>
@@ -206,9 +226,15 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
             </label>
           </div>
 
-          <Tags updateTags={updateTags} />
+          <Tags updateTags={updateTags} selectedTags={movieInfo.tags} />
 
-          <LiveSearch onClick={updateDirector} placeholder='search profile' results={results} name='director' />
+          <LiveSearch
+            onClick={updateDirector}
+            placeholder='search profile'
+            results={results}
+            name='director'
+            val={movieInfo.director?.name}
+          />
           <LiveSearch
             onClick={updateWriters}
             placeholder='search profile'
@@ -230,7 +256,7 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
               type='date'
               id='releaseDate'
               name='releaseDate'
-              value={movieInfo.releaseDate}
+              value={movieInfo.releaseDate.split('T')[0]}
               onChange={handleOnChange}
               className='px-1 self-start cursor-pointer bg-transparent outline-none border-[#aaa] dark:border-[#aaa] border-[1px] rounded text-white focus:border-black dark:focus:border-white peer'
             />
@@ -244,7 +270,7 @@ const MovieForm = ({ visible, trailer, closeModal, toggleVideoStates }) => {
         </div>
         {/* Right side */}
         <div className='space-y-4'>
-          <PosterUploader onChange={handleOnChange} selectedPoster={selectedPoster} />
+          <PosterUploader onChange={handleOnChange} selectedPoster={selectedPoster} className='h-56' />
           <Geners openModal={toggleGenresModal} genre={movieInfo.genre} />
           <Select label='type' name='type' options={typeOptions} value={movieInfo.type} onChange={handleOnChange} />
           <Select

@@ -27,17 +27,17 @@ const postMovie = async movieInfo => {
   }
 }
 
-// const updateMovie = async movieInfo => {
-//   try {
-//     const { data } = await customFetch.post(`/movie`, movieInfo)
-//     return { data }
-//   } catch (error) {
-//     console.log(error)
-//     const { response } = error
-//     if (response?.data) return { error: response.data }
-//     return { error }
-//   }
-// }
+const updateMovie = async (id, movieInfo) => {
+  try {
+    const { data } = await customFetch.patch(`/movie/${id}`, movieInfo)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
 
 const getMovies = async (page, limit) => {
   try {
@@ -51,4 +51,28 @@ const getMovies = async (page, limit) => {
   }
 }
 
-export { postTrailer, postMovie, getMovies }
+const getMovie = async id => {
+  try {
+    const { data } = await customFetch.get(`/movie/${id}`)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+const searchMovie = async title => {
+  try {
+    const { data } = await customFetch.get(`/movie/search?title=${title}`)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export { postTrailer, postMovie, getMovies, getMovie, updateMovie, searchMovie }

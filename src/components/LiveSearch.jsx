@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { searchActor } from '../apis/actor'
 import Modal from './Modal'
 
-const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWritersModal, resetInput }) => {
+const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWritersModal, resetInput, val }) => {
   const resultRef = useRef()
   const inputRef = useRef()
   const [resultsVisible, setResultsVisible] = useState(false)
@@ -25,12 +25,16 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
   useEffect(() => {
     const timer = setTimeout(async () => {
       const { data } = await searchActor(input)
-      console.log(data)
+      // console.log(data)
       setActors(data.actors)
     }, 300)
 
     return () => clearTimeout(timer)
   }, [input])
+
+  useEffect(() => {
+    setInput(val)
+  }, [val])
 
   const handleOnClick = result => {
     onClick(result)
@@ -93,7 +97,7 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
           className='absolute right-0 dark:text-white capitalize text-xs dark:disabled:text-[#aaa] disabled:cursor-not-allowed'
           type='button'
           onClick={handleButtonClick}
-          disabled={writers.length === 0}
+          disabled={writers?.length === 0}
         >
           view all
         </button>
@@ -119,7 +123,7 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
           {name}
           {name === 'writers' && (
             <span className='bg-custom-yellow h-4 w-4 rounded-full text-xs text-black inline-flex items-center justify-center absolute bottom-2'>
-              {writers.length}
+              {writers?.length}
             </span>
           )}
         </label>

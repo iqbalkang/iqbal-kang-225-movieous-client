@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PosterUploader = ({ onChange, selectedPoster }) => {
+const PosterUploader = ({ onChange, selectedPoster, className }) => {
   return (
     <div>
       <input
@@ -13,7 +13,7 @@ const PosterUploader = ({ onChange, selectedPoster }) => {
       />
       <label htmlFor='poster' className='cursor-pointer dark:text-[#aaa]'>
         {selectedPoster ? (
-          <img src={selectedPoster} className='rounded' />
+          <img src={selectedPoster} className={`rounded ${className}`} />
         ) : (
           <div className='border border-[#aaa] border-dashed h-36 flex justify-center items-center rounded'>
             <p>Select Poster</p>
