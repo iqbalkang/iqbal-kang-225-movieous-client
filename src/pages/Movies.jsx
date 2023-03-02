@@ -1,37 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { getMovies } from '../apis/movie'
 import Movie from '../components/Movie'
 import Pagination from '../components/Pagination'
 import MovieForm from '../components/MovieForm'
 import Modal from '../components/Modal'
 import { getMovie } from '../apis/movie'
-
-const limit = 5
+import useMovies from '../hooks/useMovies'
 
 const Movies = () => {
-  const [movies, setMovies] = useState([])
-  const [currentPage, setCurrentPage] = useState(0)
   const [movieModal, setMovieModal] = useState(false)
   const [selectedMovie, setSelectedMovie] = useState(null)
 
+  const { fetchMovies, currentPage, handleNext, handlePrev, movies } = useMovies()
+
   const toggleModal = () => setMovieModal(prevState => !prevState)
-  const handleNext = () => setCurrentPage(currentPage + 1)
-
-  const handlePrev = () => {
-    if (currentPage < 1) return
-    setCurrentPage(currentPage - 1)
-  }
-
-  const fetchMovies = async () => {
-    const { data, error } = await getMovies(currentPage, limit)
-    if (!data.movies.length) return setCurrentPage(currentPage - 1)
-    setMovies(data.movies)
-  }
 
   const handleOnMovieEdit = async id => {
     toggleModal()
     const { data, error } = await getMovie(id)
-    console.log(data.movie)
     setSelectedMovie(data.movie)
   }
 

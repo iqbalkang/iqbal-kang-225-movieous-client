@@ -123,7 +123,6 @@ const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoSta
       updatedMovieInfo.cast = JSON.stringify(finalCast)
     }
 
-    console.log(movieInfo.trailer)
     if (movieInfo.trailer || trailer) updatedMovieInfo.trailer = JSON.stringify(trailer || movieInfo.trailer)
     if (poster?.url) updatedMovieInfo.poster = JSON.stringify(poster)
 

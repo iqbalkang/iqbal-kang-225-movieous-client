@@ -1,14 +1,17 @@
 import React from 'react'
 import AuthProvider from './AuthProvider'
+import MoviesProvider from './MoviesProvider'
 import NotificationProvider from './NotificationProvider'
 import ThemeProvider from './ThemeProvider'
 
 const ContextProvider = ({ children }) => {
   return (
     <NotificationProvider>
-      <AuthProvider>
-        <ThemeProvider>{children}</ThemeProvider>
-      </AuthProvider>
+      <MoviesProvider>
+        <AuthProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </AuthProvider>
+      </MoviesProvider>
     </NotificationProvider>
   )
 }
