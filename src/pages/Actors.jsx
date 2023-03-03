@@ -6,6 +6,7 @@ import Modal from '../components/Modal'
 import ActorForm from '../components/ActorForm'
 import Search from '../components/Search'
 import useNotification from '../hooks/useNotification'
+import UpdateActorModal from '../components/modals/UpdateActorModal'
 
 const limit = 12
 
@@ -31,8 +32,10 @@ const Actors = () => {
     setActors([...updatedActors])
   }
 
-  const handleActorModal = () => setActorModal(prevState => !prevState)
+  const toggleActorModal = () => setActorModal(prevState => !prevState)
+
   const handleNext = () => setCurrentPage(currentPage + 1)
+
   const handlePrev = () => {
     if (currentPage < 1) return
     setCurrentPage(currentPage - 1)
@@ -75,15 +78,12 @@ const Actors = () => {
       <div className='grid lg:grid-cols-2 xl:grid-cols-3 mt-4 gap-4'>{renderActors()}</div>
       <Pagination handleNext={handleNext} handlePrev={handlePrev} />
 
-      {actorModal && (
-        <Modal closeModal={handleActorModal} className='h-auto w-auto px-6'>
-          <ActorForm
-            closeModal={handleActorModal}
-            selectedProfile={selectedProfile}
-            handleEditSubmit={handleEditSubmit}
-          />
-        </Modal>
-      )}
+      <UpdateActorModal
+        visible={actorModal}
+        closeModal={toggleActorModal}
+        selectedProfile={selectedProfile}
+        handleEditSubmit={handleEditSubmit}
+      />
     </div>
   )
 }

@@ -8,13 +8,15 @@ import CastForm from './CastForm'
 import PosterUploader from './PosterUploader'
 import Geners from './Geners'
 import Modal from './Modal'
-import GenreModal from './GenreModal'
+import GenreModal from './modals/GenreModal'
 import Select from './Select'
 import options, { languageOptions, statusOptions, typeOptions } from '../utils/options'
 import useNotification from '../hooks/useNotification'
 import { postMovie, updateMovie } from '../apis/movie'
 import validateMovie from '../utils/validateMovie'
 import { ImSpinner2 } from 'react-icons/im'
+import WritersModal from './modals/WritersModal'
+import LiveSearch2 from './LiveSearch2'
 
 const defaultMovieInfo = {
   title: '',
@@ -32,7 +34,7 @@ const defaultMovieInfo = {
   trailer: {},
 }
 
-const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoStates }) => {
+const MovieForm = ({ trailer, closeModal, selectedMovie, toggleVideoStates }) => {
   const { renderNotification } = useNotification()
 
   const [movieInfo, setMovieInfo] = useState(defaultMovieInfo)
@@ -40,6 +42,8 @@ const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoSta
   const [selectedPoster, setSelectedPoster] = useState('')
   const [showGenresModal, setShowGenresModal] = useState(false)
   const [uploading, setUploading] = useState(false)
+
+  const { title, storyLine, director, writers, genre, tags } = movieInfo
 
   const handleOnChange = e => {
     const { name, value, files } = e.target
@@ -61,9 +65,10 @@ const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoSta
     setMovieInfo({ ...movieInfo, director })
   }
 
-  const updateWriters = writer => {
-    if (movieInfo.writers.includes(writer)) return null
-    setMovieInfo({ ...movieInfo, writers: [...movieInfo.writers, writer] })
+  const updateWriters = selectedWriter => {
+    const writerIndex = writers.findIndex(writer => writer.actorId === selectedWriter.actorId)
+    if (writerIndex !== -1) return null
+    setMovieInfo({ ...movieInfo, writers: [...writers, selectedWriter] })
   }
 
   const updateCast = cast => {
@@ -127,7 +132,7 @@ const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoSta
     if (poster?.url) updatedMovieInfo.poster = JSON.stringify(poster)
 
     for (let key in updatedMovieInfo) {
-      console.log(key, updatedMovieInfo[key])
+      // console.log(key, updatedMovieInfo[key])
       formData.append(key, updatedMovieInfo[key])
     }
 
@@ -156,146 +161,123 @@ const MovieForm = ({ visible, trailer, closeModal, selectedMovie, toggleVideoSta
     }
   }, [selectedMovie])
 
-  console.log(movieInfo)
-
-  const renderWriters = () => {
-    return movieInfo.writers.map((writer, index) => {
-      const { image, name } = writer
-      return (
-        <div className='flex items-center gap-8 justify-between' key={index}>
-          <div className='flex items-center gap-2'>
-            <img src={image.url} alt='' className='h-12 w-12 object-cover rounded-full' />
-            <p className='capitalize whitespace-nowrap'>{name}</p>
-          </div>
-          <IoMdClose
-            className='cursor-pointer hover:text-custom-yellow'
-            onClick={handleDeleteWriter.bind(null, writer)}
-          />
-        </div>
-      )
-    })
-  }
-
-  if (!visible) return null
+  console.log(writers)
 
   return (
-    <>
-      <form
-        className='grid grid-cols-[70%,30%] p-2 px-6 gap-4 relative min-h-full place-content-center'
-        onSubmit={handleSubmit}
-      >
-        {writersModal && movieInfo.writers?.length > 0 && (
-          <InnerModal closeModal={toggleWritersModal}>
-            <div className='space-y-4'>{renderWriters()}</div>
-          </InnerModal>
-        )}
-        <div className='space-y-4'>
-          <div className='flex flex-col-reverse'>
-            <input
-              type='text'
-              id='title'
-              name='title'
-              value={movieInfo.title}
-              onChange={handleOnChange}
-              placeholder='interstellar'
-              className='bg-transparent capitalize outline-none border-b-[#aaa] dark:border-b-[#aaa] border-b-[1px] text-white focus:border-b-black dark:focus:border-b-white peer'
-            />
-            <label
-              htmlFor='title'
-              className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
-            >
-              title
-            </label>
-          </div>
+    <form
+      className='grid grid-cols-[70%,30%] p-2 px-6 gap-4 relative min-h-full place-content-center'
+      onSubmit={handleSubmit}
+    >
+      <WritersModal
+        visible={writersModal && movieInfo.writers?.length > 0}
+        closeModal={toggleWritersModal}
+        writers={writers}
+        handleDeleteWriter={handleDeleteWriter}
+      />
 
-          <div className='flex flex-col-reverse'>
-            <textarea
-              id='storyLine'
-              name='storyLine'
-              value={movieInfo.storyLine}
-              onChange={handleOnChange}
-              placeholder='movie story line...'
-              className='capitalize h-20 bg-transparent outline-none border-b-[#aaa] dark:border-b-[#aaa] border-b-[1px] text-white focus:border-b-black dark:focus:border-b-white peer resize-none'
-            ></textarea>
-            <label
-              htmlFor='storyLine'
-              className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
-            >
-              Storyline
-            </label>
-          </div>
+      <GenreModal visible={showGenresModal} closeModal={toggleGenresModal} updateGenres={updateGenres} genre={genre} />
 
-          <Tags updateTags={updateTags} selectedTags={movieInfo.tags} />
-
-          <LiveSearch
-            onClick={updateDirector}
-            placeholder='search profile'
-            results={results}
-            name='director'
-            val={movieInfo.director?.name}
-          />
-          <LiveSearch
-            onClick={updateWriters}
-            placeholder='search profile'
-            results={results}
-            name='writers'
-            writers={movieInfo.writers}
-            toggleWritersModal={toggleWritersModal}
-          />
-          <CastForm
-            onClick={updateCast}
-            cast={movieInfo.cast}
-            toggleWritersModal={toggleWritersModal}
-            modal={writersModal}
-            deleteCast={handleDeleteCast}
-          />
-
-          <div className='flex flex-col-reverse'>
-            <input
-              type='date'
-              id='releaseDate'
-              name='releaseDate'
-              value={movieInfo.releaseDate.split('T')[0]}
-              onChange={handleOnChange}
-              className='px-1 self-start cursor-pointer bg-transparent outline-none border-[#aaa] dark:border-[#aaa] border-[1px] rounded text-white focus:border-black dark:focus:border-white peer'
-            />
-            <label
-              htmlFor='releaseDate'
-              className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
-            >
-              release date
-            </label>
-          </div>
-        </div>
-        {/* Right side */}
-        <div className='space-y-4'>
-          <PosterUploader onChange={handleOnChange} selectedPoster={selectedPoster} className='h-56' />
-          <Geners openModal={toggleGenresModal} genre={movieInfo.genre} />
-          <Select label='type' name='type' options={typeOptions} value={movieInfo.type} onChange={handleOnChange} />
-          <Select
-            label='language'
-            name='language'
-            options={languageOptions}
-            value={movieInfo.language}
+      {/* left side */}
+      <div className='space-y-4'>
+        <div className='flex flex-col-reverse'>
+          <input
+            type='text'
+            id='title'
+            name='title'
+            value={title}
             onChange={handleOnChange}
+            placeholder='interstellar'
+            className='bg-transparent capitalize outline-none border-b-[#aaa] dark:border-b-[#aaa] border-b-[1px] text-white focus:border-b-black dark:focus:border-b-white peer'
           />
-          <Select
-            label='status'
-            name='status'
-            options={statusOptions}
-            value={movieInfo.status}
-            onChange={handleOnChange}
-          />
+          <label
+            htmlFor='title'
+            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
+          >
+            title
+          </label>
         </div>
-        <button className='dark:bg-white rounded h-8 flex justify-center items-center'>
-          {uploading ? <ImSpinner2 className='animate-spin' /> : 'Upload Movie'}
-        </button>
-      </form>
 
-      {showGenresModal && (
-        <GenreModal closeModal={toggleGenresModal} updateGenres={updateGenres} genre={movieInfo.genre} />
-      )}
-    </>
+        <div className='flex flex-col-reverse'>
+          <textarea
+            id='storyLine'
+            name='storyLine'
+            value={storyLine}
+            onChange={handleOnChange}
+            placeholder='movie story line...'
+            className='capitalize h-20 bg-transparent outline-none border-b-[#aaa] dark:border-b-[#aaa] border-b-[1px] text-white focus:border-b-black dark:focus:border-b-white peer resize-none'
+          ></textarea>
+          <label
+            htmlFor='storyLine'
+            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
+          >
+            Storyline
+          </label>
+        </div>
+
+        <Tags updateTags={updateTags} tags={tags} />
+
+        <div className='flex flex-col-reverse relative'>
+          {/* <label htmlFor='director'>director</label> */}
+          <LiveSearch2 name='director' onClick={updateDirector} value={director?.name} />
+          <label
+            htmlFor='director'
+            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start relative'
+          >
+            director
+          </label>
+        </div>
+
+        <LiveSearch2 name='writers' onClick={updateWriters} value={writers?.name} />
+        {/* 
+        <CastForm
+          onClick={updateCast}
+          cast={movieInfo.cast}
+          toggleWritersModal={toggleWritersModal}
+          modal={writersModal}
+          deleteCast={handleDeleteCast}
+        /> */}
+
+        {/* <div className='flex flex-col-reverse'>
+          <input
+            type='date'
+            id='releaseDate'
+            name='releaseDate'
+            value={movieInfo.releaseDate.split('T')[0]}
+            onChange={handleOnChange}
+            className='px-1 self-start cursor-pointer bg-transparent outline-none border-[#aaa] dark:border-[#aaa] border-[1px] rounded text-white focus:border-black dark:focus:border-white peer'
+          />
+          <label
+            htmlFor='releaseDate'
+            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
+          >
+            release date
+          </label>
+        </div> */}
+      </div>
+      {/* Right side */}
+      <div className='space-y-4'>
+        <PosterUploader onChange={handleOnChange} selectedPoster={selectedPoster} className='h-56' />
+        <Geners openModal={toggleGenresModal} genre={movieInfo.genre} />
+        <Select label='type' name='type' options={typeOptions} value={movieInfo.type} onChange={handleOnChange} />
+        <Select
+          label='language'
+          name='language'
+          options={languageOptions}
+          value={movieInfo.language}
+          onChange={handleOnChange}
+        />
+        <Select
+          label='status'
+          name='status'
+          options={statusOptions}
+          value={movieInfo.status}
+          onChange={handleOnChange}
+        />
+      </div>
+      <button className='dark:bg-white rounded h-8 flex justify-center items-center'>
+        {uploading ? <ImSpinner2 className='animate-spin' /> : 'Upload Movie'}
+      </button>
+    </form>
   )
 }
 

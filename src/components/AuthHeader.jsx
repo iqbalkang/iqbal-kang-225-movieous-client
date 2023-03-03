@@ -9,11 +9,13 @@ import ActorForm from './ActorForm'
 import { postTrailer } from '../apis/movie'
 import ProgressBar from './ProgressBar'
 import { useNavigate } from 'react-router-dom'
+import CreateActorModal from './modals/CreateActorModal'
+import CreateMovieModal from './modals/CreateMovieModal'
 
 const AuthHeader = () => {
   const navigate = useNavigate()
   const [createButton, setCreateButton] = useState(false)
-  const [movieModal, setMovieModal] = useState(false)
+  const [movieModal, setMovieModal] = useState(true) //temp
   const [actorModal, setActorModal] = useState(false)
 
   const handleMovieModal = () => setMovieModal(prevState => !prevState)
@@ -25,16 +27,15 @@ const AuthHeader = () => {
   const [videoUploaded, setVideoUploaded] = useState(false)
   const [trailerInfo, setTrailerInfo] = useState({})
 
-  const handleChange = async file => {
-    setVideoSelected(true)
-    const trailer = new FormData()
-    trailer.append('trailer', file)
+  // const handleChange = async file => {
+  //   setVideoSelected(true)
+  //   const trailer = new FormData()
+  //   trailer.append('trailer', file)
 
-    const { data } = await postTrailer(trailer, setUploadProgress)
-    // console.log(data)
-    setTrailerInfo(data)
-    setVideoUploaded(true)
-  }
+  //   const { data } = await postTrailer(trailer, setUploadProgress)
+  //   setTrailerInfo(data)
+  //   setVideoUploaded(true)
+  // }
 
   const toggleVideoStates = () => {
     setVideoSelected(false)
@@ -59,7 +60,7 @@ const AuthHeader = () => {
 
   return (
     <header className='flex justify-between items-center'>
-      {movieModal && (
+      {/* {movieModal && (
         <Modal closeModal={handleMovieModal}>
           <UploadTrailer handleChange={handleChange} visible={videoSelected} />
           <ProgressBar videoUploaded={videoUploaded} videoSelected={videoSelected} uploadProgress={uploadProgress} />
@@ -70,13 +71,11 @@ const AuthHeader = () => {
             toggleVideoStates={toggleVideoStates}
           />
         </Modal>
-      )}
+      )} */}
 
-      {actorModal && (
-        <Modal closeModal={handleActorModal} className='h-auto w-auto px-6'>
-          <ActorForm closeModal={handleActorModal} />
-        </Modal>
-      )}
+      <CreateMovieModal visible={movieModal} closeModal={handleMovieModal} />
+
+      <CreateActorModal visible={actorModal} closeModal={handleActorModal} />
 
       <Search placeholder='search movies' onSubmit={handleSearchSubmit} onReset={handleSearchReset} />
 

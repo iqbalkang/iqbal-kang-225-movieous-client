@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ProgressBar = ({ uploadProgress, message, videoSelected, videoUploaded }) => {
+const ProgressBar = ({ uploadProgress, videoSelected, videoUploaded }) => {
   const displayMessage = () => {
     if (uploadProgress < 100) return `${uploadProgress}%`
     else return 'Processing'

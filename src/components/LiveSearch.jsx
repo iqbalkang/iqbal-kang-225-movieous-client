@@ -115,6 +115,7 @@ const LiveSearch = ({ onClick, placeholder, results, name, writers, toggleWriter
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
           onKeyDown={handleOnKeyDown}
+          autocomplete='off'
         />
         <label
           htmlFor={name}
