@@ -6,7 +6,7 @@ const WritersModal = ({ visible, closeModal, writers, handleDeleteWriter }) => {
   if (!visible) return null
 
   return (
-    <Modal closeModal={closeModal} className='w-fit h-fit px-6 dark:bg-background'>
+    <Modal closeModal={closeModal} className='w-fit h-fit max-h-[30rem] px-6 dark:bg-background'>
       <div className='space-y-4'>
         <RenderWriters writers={writers} handleDeleteWriter={handleDeleteWriter} />
       </div>

@@ -5,18 +5,37 @@ import MovieForm from '../components/MovieForm'
 import Modal from '../components/Modal'
 import { getMovie } from '../apis/movie'
 import useMovies from '../hooks/useMovies'
+import useConfirm from '../hooks/useConfirm'
+import ConfirmModal from '../components/modals/ConfirmModal'
 
 const Movies = () => {
-  const [movieModal, setMovieModal] = useState(false)
-  const [selectedMovie, setSelectedMovie] = useState(null)
+  const {
+    confirmModal,
+    fillingForm,
+    setConfirmModal,
+    setFillingForm,
+    toggleModal,
+    setMovieModal,
+    movieModal,
+    closeConfirmModal,
+    forceCloseModals,
+    toggleFillingForm,
+    selectedMovie,
+    setSelectedMovie,
+  } = useConfirm()
+
+  // const [movieModal, setMovieModal] = useState(false)
+  // const [selectedMovie, setSelectedMovie] = useState(null)
 
   const { fetchMovies, currentPage, handleNext, handlePrev, movies } = useMovies()
 
-  const toggleModal = () => setMovieModal(prevState => !prevState)
+  // const toggleModal = () => setMovieModal(prevState => !prevState)
 
   const handleOnMovieEdit = async id => {
     toggleModal()
     const { data, error } = await getMovie(id)
+    if (error) return console.log(error)
+    console.log(data.movie)
     setSelectedMovie(data.movie)
   }
 
@@ -32,10 +51,16 @@ const Movies = () => {
       <Pagination handlePrev={handlePrev} handleNext={handleNext} />
 
       {movieModal && (
-        <Modal closeModal={setMovieModal}>
-          <MovieForm closeModal={setMovieModal} visible={movieModal} selectedMovie={selectedMovie} />
+        <Modal closeModal={toggleModal}>
+          <MovieForm
+            closeModal={setMovieModal}
+            visible={movieModal}
+            selectedMovie={selectedMovie}
+            toggleFillingForm={toggleFillingForm}
+          />
         </Modal>
       )}
+      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} />
     </div>
   )
 }

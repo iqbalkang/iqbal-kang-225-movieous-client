@@ -6,14 +6,51 @@ import useMovies from '../../hooks/useMovies'
 import { getMovie } from '../../apis/movie'
 import Modal from '../Modal'
 import MovieForm from '../MovieForm'
+import ConfirmModal from '../modals/ConfirmModal'
+import useConfirm from '../../hooks/useConfirm'
 
 const RecentUploads = () => {
   const { recentUploads, fetchLatestMovies } = useMovies()
+  const {
+    confirmModal,
+    fillingForm,
+    setConfirmModal,
+    setFillingForm,
+    toggleModal,
+    setMovieModal,
+    movieModal,
+    closeConfirmModal,
+    forceCloseModals,
+    toggleFillingForm,
+    selectedMovie,
+    setSelectedMovie,
+  } = useConfirm()
 
-  const [movieModal, setMovieModal] = useState(false)
-  const [selectedMovie, setSelectedMovie] = useState(null)
+  // const [confirmModal, setConfirmModal] = useState(false)
+  // const [fillingForm, setFillingForm] = useState(false)
 
-  const toggleModal = () => setMovieModal(prevState => !prevState)
+  // const [movieModal, setMovieModal] = useState(false)
+  //  ! const [selectedMovie, setSelectedMovie] = useState(null)
+
+  // const toggleModal = () => {
+  //   if (fillingForm) return setConfirmModal(true)
+  //   setMovieModal(prevState => !prevState)
+  // }
+
+  // const closeConfirmModal = () => {
+  //   setConfirmModal(false)
+  // }
+
+  // const toggleFillingForm = () => {
+  //   // setConfirmModal(true)
+  //   setFillingForm(true)
+  // }
+
+  // const forceCloseModals = () => {
+  //   setFillingForm(false)
+  //   setMovieModal(false)
+  //   setConfirmModal(false)
+  // }
 
   const handleOnMovieEdit = async id => {
     toggleModal()
@@ -35,10 +72,17 @@ const RecentUploads = () => {
       <div className='divide-black dark:divide-white divide-y-2'>{renderMovies()}</div>
 
       {movieModal && (
-        <Modal closeModal={setMovieModal}>
-          <MovieForm closeModal={setMovieModal} visible={movieModal} selectedMovie={selectedMovie} />
+        <Modal closeModal={toggleModal}>
+          <MovieForm
+            closeModal={setMovieModal}
+            visible={movieModal}
+            selectedMovie={selectedMovie}
+            toggleFillingForm={toggleFillingForm}
+          />
         </Modal>
       )}
+
+      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} />
     </Box>
   )
 }

@@ -11,21 +11,69 @@ import ProgressBar from './ProgressBar'
 import { useNavigate } from 'react-router-dom'
 import CreateActorModal from './modals/CreateActorModal'
 import CreateMovieModal from './modals/CreateMovieModal'
+import ConfirmModal from './modals/ConfirmModal'
+import useConfirm from '../hooks/useConfirm'
 
 const AuthHeader = () => {
   const navigate = useNavigate()
   const [createButton, setCreateButton] = useState(false)
-  const [movieModal, setMovieModal] = useState(true) //temp
   const [actorModal, setActorModal] = useState(false)
+  // const [movieModal, setMovieModal] = useState(false) //temp
+  // const [confirmModal, setConfirmModal] = useState(false)
+  // const [fillingForm, setFillingForm] = useState(false)
 
-  const handleMovieModal = () => setMovieModal(prevState => !prevState)
+  const {
+    confirmModal,
+    fillingForm,
+    setConfirmModal,
+    setFillingForm,
+    toggleModal,
+    setMovieModal,
+    movieModal,
+    closeConfirmModal,
+    forceCloseModals,
+    toggleFillingForm,
+    createMovieModal,
+    setCreateMovieModal,
+  } = useConfirm()
+
   const handleActorModal = () => setActorModal(prevState => !prevState)
   const toggleCreateButton = () => setCreateButton(prevState => !prevState)
 
-  const [videoSelected, setVideoSelected] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [videoUploaded, setVideoUploaded] = useState(false)
-  const [trailerInfo, setTrailerInfo] = useState({})
+  const handleMovieModal = () => {
+    if (fillingForm) return setConfirmModal(true)
+    setCreateMovieModal(prevState => !prevState)
+  }
+
+  // const closeConfirmModal = () => {
+  //   setConfirmModal(false)
+  // }
+
+  // const toggleFillingForm = () => {
+  //   // setConfirmModal(true)
+  //   setFillingForm(true)
+  // }
+
+  // const forceCloseModals = () => {
+  //   setFillingForm(false)
+  //   setMovieModal(false)
+  //   setConfirmModal(false)
+  // }
+
+  // console.log(fillingForm)
+
+  // const closeConfirmModal = () => {
+  //   console.log(fillingForm)
+  //   if (fillingForm) return setConfirmModal(true)
+  //   setConfirmModal(false)
+  //   // closeModal()
+  // }
+
+  const forceCloseConfirmModal = () => setConfirmModal(false)
+  // const [videoSelected, setVideoSelected] = useState(false)
+  // const [uploadProgress, setUploadProgress] = useState(0)
+  // const [videoUploaded, setVideoUploaded] = useState(false)
+  // const [trailerInfo, setTrailerInfo] = useState({})
 
   // const handleChange = async file => {
   //   setVideoSelected(true)
@@ -37,11 +85,11 @@ const AuthHeader = () => {
   //   setVideoUploaded(true)
   // }
 
-  const toggleVideoStates = () => {
-    setVideoSelected(false)
-    setUploadProgress(0)
-    setVideoUploaded(false)
-  }
+  // const toggleVideoStates = () => {
+  //   setVideoSelected(false)
+  //   setUploadProgress(0)
+  //   setVideoUploaded(false)
+  // }
 
   const menuRef = useRef()
   const buttonRef = useRef()
@@ -58,6 +106,8 @@ const AuthHeader = () => {
     navigate(-1)
   }
 
+  const forceCloseMovieModal = () => setMovieModal(false)
+
   return (
     <header className='flex justify-between items-center'>
       {/* {movieModal && (
@@ -73,9 +123,19 @@ const AuthHeader = () => {
         </Modal>
       )} */}
 
-      <CreateMovieModal visible={movieModal} closeModal={handleMovieModal} />
+      <CreateMovieModal
+        visible={createMovieModal}
+        closeModal={handleMovieModal}
+        forceCloseMovieModal={forceCloseMovieModal}
+        fillingForm={fillingForm}
+        toggleFillingForm={toggleFillingForm}
+        closeConfirmModal={closeConfirmModal}
+        forceCloseConfirmModal={forceCloseConfirmModal}
+      />
 
       <CreateActorModal visible={actorModal} closeModal={handleActorModal} />
+
+      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} />
 
       <Search placeholder='search movies' onSubmit={handleSearchSubmit} onReset={handleSearchReset} />
 

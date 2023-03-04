@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from '../Modal'
 import genres from '../../utils/geners'
 
 const GenreModal = ({ visible, closeModal, updateGenres, genre }) => {
-  const [selectedGeneres, setSelectedGeneres] = useState(genre)
+  const [selectedGeneres, setSelectedGeneres] = useState([])
 
   const selectGenre = genre => {
     if (selectedGeneres.includes(genre)) {
@@ -17,6 +17,10 @@ const GenreModal = ({ visible, closeModal, updateGenres, genre }) => {
     updateGenres(selectedGeneres)
     closeModal()
   }
+
+  useEffect(() => {
+    setSelectedGeneres(genre)
+  }, [genre])
 
   if (!visible) return null
 

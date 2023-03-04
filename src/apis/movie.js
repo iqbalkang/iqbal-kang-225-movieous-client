@@ -34,7 +34,7 @@ const updateMovie = async (id, movieInfo) => {
   } catch (error) {
     console.log(error)
     const { response } = error
-    if (response?.data) return { error: response.data }
+    if (response?.data) return { error: response.data.message }
     return { error }
   }
 }

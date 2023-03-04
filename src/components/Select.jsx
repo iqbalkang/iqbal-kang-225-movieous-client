@@ -10,7 +10,7 @@ const Select = ({ label, options, value, onChange, name }) => {
         onChange={onChange}
         className={`${
           value ? 'dark:text-white' : 'dark:text-[#aaa]'
-        } bg-transparent capitalize outline-none cursor-pointer border border-[#aaa] rounded p-1`}
+        } bg-transparent capitalize outline-none cursor-pointer border border-[#aaa] rounded p-1 focus:border-white`}
       >
         <option value=''>{label}</option>
         {options.map(option => {
