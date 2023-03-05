@@ -66,7 +66,7 @@ const AuthHeader = () => {
 
       <CreateActorModal visible={actorModal} closeModal={handleActorModal} />
 
-      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} />
+      {/* <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} /> */}
 
       <Search placeholder='search movies' onSubmit={handleSearchSubmit} onReset={handleSearchReset} />
 

@@ -50,7 +50,7 @@ const RecentUploads = () => {
         toggleModal={toggleModal}
       />
 
-      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} />
+      {/* <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} /> */}
     </Box>
   )
 }

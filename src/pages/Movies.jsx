@@ -73,7 +73,7 @@ const Movies = () => {
           />
         </Modal>
       )} */}
-      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} />
+      {/* <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} /> */}
     </div>
   )
 }

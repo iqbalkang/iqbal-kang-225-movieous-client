@@ -32,13 +32,13 @@ const CreateMovieModal = ({ visible, closeModal, toggleFillingForm }) => {
 
   return (
     <Modal closeModal={closeModal}>
-      <MovieForm
+      {/* <MovieForm
         trailer={trailerInfo}
         toggleFillingForm={toggleFillingForm}
         videoSelected={videoSelected}
         toggleVideoStates={1}
-      />
-      {/* <UploadTrailer visible={videoSelected} handleChange={handleChange} />
+      /> */}
+      <UploadTrailer visible={videoSelected} handleChange={handleChange} />
       {videoSelected && (
         <>
           <ProgressBar videoUploaded={videoUploaded} videoSelected={videoSelected} uploadProgress={uploadProgress} />
@@ -50,7 +50,7 @@ const CreateMovieModal = ({ visible, closeModal, toggleFillingForm }) => {
             closeModal={closeModal}
           />
         </>
-      )} */}
+      )}
     </Modal>
   )
 }

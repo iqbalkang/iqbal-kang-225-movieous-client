@@ -18,6 +18,7 @@ import useConfirm from '../hooks/useConfirm'
 import SubmitButton from './SubmitButton'
 import Input from './Input'
 import Label from './Label'
+import ConfirmModal from './modals/ConfirmModal'
 
 const defaultMovieInfo = {
   title: '',
@@ -39,9 +40,19 @@ const formRowStyles = 'flex flex-col-reverse '
 const inputStyles =
   'bg-transparent capitalize outline-none border-b-grayish dark:border-b-grayish border-b-[1px] toggle-text focus:border-b-black dark:focus:border-b-white peer '
 
-const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingForm }) => {
+const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates }) => {
   const { renderNotification } = useNotification()
-  const { forceCloseModals } = useConfirm()
+  const {
+    confirmModal,
+    fillingForm,
+    setConfirmModal,
+    setMovieModal,
+    closeConfirmModal,
+    forceCloseModals,
+    toggleFillingForm,
+    createMovieModal,
+    setCreateMovieModal,
+  } = useConfirm()
 
   const [movieInfo, setMovieInfo] = useState(defaultMovieInfo)
   const [writersModal, setWritersModal] = useState(false)
@@ -90,13 +101,6 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
 
   const toggleWritersModal = () => setWritersModal(prevState => !prevState)
   const toggleGenresModal = () => setShowGenresModal(prevState => !prevState)
-
-  useEffect(() => {
-    for (let key in movieInfo) {
-      if (typeof movieInfo[key] === 'string' && movieInfo[key] !== '') return toggleFillingForm()
-      if (typeof movieInfo[key] === 'object' && movieInfo[key]?.length >= 1) return toggleFillingForm()
-    }
-  }, [movieInfo])
 
   const handleDeleteWriter = writer => {
     const remainingWriters = writers.filter(singleWriter => singleWriter.name !== writer.name)
@@ -174,6 +178,19 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
     }
   }, [selectedMovie])
 
+  useEffect(() => {
+    for (let key in movieInfo) {
+      if ((typeof movieInfo[key] === 'string' && movieInfo[key] !== '') || videoSelected) return toggleFillingForm()
+      if ((typeof movieInfo[key] === 'object' && movieInfo[key]?.length >= 1) || videoSelected)
+        return toggleFillingForm()
+    }
+  }, [movieInfo])
+
+  const superForce = () => {
+    if (toggleVideoStates) toggleVideoStates()
+    forceCloseModals()
+  }
+
   console.log(movieInfo)
 
   return (
@@ -189,6 +206,8 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
       />
 
       <GenreModal visible={showGenresModal} closeModal={toggleGenresModal} updateGenres={updateGenres} genre={genre} />
+
+      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={superForce} />
 
       {/* left side */}
       <div className='space-y-4'>
