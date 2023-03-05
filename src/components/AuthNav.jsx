@@ -8,6 +8,24 @@ import { AiOutlineLogout, AiOutlineUsergroupAdd } from 'react-icons/ai'
 import useAuth from '../hooks/useAuth'
 import useTheme from '../hooks/useTheme'
 
+const menuItems = [
+  {
+    item: 'home',
+    path: '/',
+    icon: <GoHome />,
+  },
+  {
+    item: 'actors',
+    path: '/actors',
+    icon: <AiOutlineUsergroupAdd />,
+  },
+  {
+    item: 'movies',
+    path: '/movies',
+    icon: <MdOutlineLocalMovies />,
+  },
+]
+
 const AuthNav = () => {
   const navigate = useNavigate()
   const { authInfo, logout } = useAuth()
@@ -23,43 +41,23 @@ const AuthNav = () => {
   //   if (!user) navigate('/login')
   // }, user)
 
-  const renderLogo = darkMode ? (
-    <img src={logo} alt='movieous logo' className='h-6 sm:h-8' />
-  ) : (
-    <img src={logoDark} alt='movieous logo' className='h-6 sm:h-8' />
-  )
+  const renderLogo = <img src={darkMode ? logo : logoDark} alt='movieous logo' className='h-6 sm:h-8' />
+
+  const renderActiveItemStyles = () => {
+    return ({ isActive }) => (isActive ? 'text-black dark:text-white' : '') + ' capitalize flex items-center gap-1'
+  }
+
+  const renderMenuItems = menuItems.map(menuItem => {
+    const { item, icon, path } = menuItem
+    return <MenuItem key={item} classes={renderActiveItemStyles()} {...menuItem} />
+  })
 
   return (
-    <aside className='border-r h-screen flex flex-col items-center py-6 dark:text-[#aaa]'>
+    <aside className='border-r h-screen flex flex-col items-center py-6 dark:text-grayish'>
       <Link to='/'>{renderLogo}</Link>
 
       <nav className='flex-1 mt-8'>
-        <ul className='space-y-4'>
-          <li>
-            <NavLink
-              to='/'
-              className={({ isActive }) => (isActive ? 'text-black dark:text-white' : '') + ' flex items-center gap-1'}
-            >
-              <GoHome /> Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to='/movies'
-              className={({ isActive }) => (isActive ? 'text-black dark:text-white' : '') + ' flex items-center gap-1'}
-            >
-              <MdOutlineLocalMovies /> Movies
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to='/actors'
-              className={({ isActive }) => (isActive ? 'text-black dark:text-white' : '') + ' flex items-center gap-1'}
-            >
-              <AiOutlineUsergroupAdd /> Actors
-            </NavLink>
-          </li>
-        </ul>
+        <ul className='space-y-4'>{renderMenuItems}</ul>
       </nav>
 
       <div>
@@ -73,3 +71,14 @@ const AuthNav = () => {
 }
 
 export default AuthNav
+
+const MenuItem = ({ path, item, icon, classes }) => {
+  return (
+    <li>
+      <NavLink to={path} className={classes}>
+        {icon}
+        {item}
+      </NavLink>
+    </li>
+  )
+}

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthCard from '../components/AuthCard'
-import Button from '../components/Button'
 import FormRow from '../components/FormRow'
 import VerticalContainer from '../components/VerticalContainer'
 import useNotification from '../hooks/useNotification'
 import useAuth from '../hooks/useAuth'
 import Form from '../components/Form'
-import { ImSpinner2 } from 'react-icons/im'
 import validateUserInfo from '../utils/validateInputs'
+import SubmitButton from '../components/SubmitButton'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -45,15 +44,13 @@ const Login = () => {
     if (error) renderNotification('error', error)
   }, [user, error])
 
-  const renderButtonText = isLoading ? <ImSpinner2 className='animate-spin' /> : 'login'
-
   return (
     <VerticalContainer>
       <AuthCard title='Login'>
         <Form onSubmit={handleSubmit}>
           <FormRow placeholder='johndoe@gmail.com' name='email' value={email} onchange={changeHandler} />
           <FormRow placeholder='******' type='password' name='password' value={password} onchange={changeHandler} />
-          <Button> {renderButtonText} </Button>
+          <SubmitButton uploading={isLoading} text='login' />
           <div className='flex justify-between'>
             <Link to='/forgot-password' className='hover:text-accent duration-200'>
               Forgot password

@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .toggle-input {
+    @apply text-black dark:text-white border border-grayish focus:border-black dark:focus:border-white;
+  }
+
+  .toggle-border {
+    @apply border border-black dark:border-white;
+  }
+
+  .toggle-bg {
+    @apply bg-black dark:bg-white text-white dark:text-black;
+  }
+
+  .toggle-text {
+    @apply text-black dark:text-white;
+  }
+}
+
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;

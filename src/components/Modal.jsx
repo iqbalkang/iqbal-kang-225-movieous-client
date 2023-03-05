@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const Modal = ({ children, closeModal, className = '' }) => {
-  const innerDivClasses = `fixed py-6 rounded bg-white dark:bg-modal w-[40rem] h-[4s5rem] shadow-md cursor-auto overflow-y-scroll ${className}`
+  const innerDivClasses = `fixed py-6 rounded bg-white dark:bg-modal w-[40rem] h-[35rem] shadow-md cursor-auto overflow-y-scroll ${className}`
 
   const handleModal = e => {
     e.stopPropagation()

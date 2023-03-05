@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import VerticalContainer from '../components/VerticalContainer'
-import Button from '../components/Button'
+import SubmitButton from '../components/SubmitButton'
 import { postVerify } from '../apis/requests'
 import useNotification from '../hooks/useNotification'
 import useAuth from '../hooks/useAuth'
-import { ImSpinner2 } from 'react-icons/im'
 
 const OTP_LENGTH = 6
 let activeIndex = 0
@@ -75,8 +74,6 @@ const Verification = () => {
     }
   }, [user, error])
 
-  const renderButtonText = isLoading ? <ImSpinner2 className='animate-spin' /> : 'verify'
-
   return (
     <VerticalContainer>
       <div className='bg-background p-8'>
@@ -89,7 +86,7 @@ const Verification = () => {
             return (
               <input
                 key={index}
-                className='appearance-none w-10 h-10 text-center rounded bg-transparent border border-[#aaa] outline-none focus:border-white duration-200'
+                className='appearance-none w-10 h-10 text-center rounded bg-transparent border border-grayish outline-none focus:border-white duration-200'
                 type='number'
                 value={otp[index]}
                 onKeyDown={e => handleKeyDown(e, index)}
@@ -99,7 +96,7 @@ const Verification = () => {
             )
           })}
         </div>
-        <Button onClick={handleSubmit}> {renderButtonText} </Button>
+        <SubmitButton onClick={handleSubmit} uploading={isLoading} text='verify' />
         <Link to='/' className='mt-2 inline-block'>
           I don't have OTP
         </Link>

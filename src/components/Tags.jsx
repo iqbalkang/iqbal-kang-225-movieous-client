@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { IoMdClose } from 'react-icons/io'
 
 const Tags = ({ updateTags, tags }) => {
-  // console.log(tags)
   const tagRef = useRef()
   const divRef = useRef()
   const labelRef = useRef()
@@ -47,12 +46,6 @@ const Tags = ({ updateTags, tags }) => {
     labelRef.current.classList.remove('text-[#000]', 'dark:text-white')
   }
 
-  // const [firstRender, setFirstRender] = useState(true)
-  // useEffect(() => {
-  //   if (firstRender && !enteredTags.length) return setEnteredTags(tags)
-  //   if (enteredTags.length) return setFirstRender(false)
-  // }, [tags])
-
   useEffect(() => {
     updateTags(enteredTags)
   }, [enteredTags])
@@ -61,13 +54,12 @@ const Tags = ({ updateTags, tags }) => {
 
   return (
     <div>
-      <label ref={labelRef} htmlFor='enteredTags' className='text-[#aaa] text-sm' onClick={handleOnFocus}>
+      <label ref={labelRef} htmlFor='enteredTags' className='text-grayish text-sm' onClick={handleOnFocus}>
         Tags
       </label>
       <div
         ref={divRef}
-        className='w-full border border-[#aaa] min-h-[32px] rounded flex items-center flex-wrap gap-2 p-1'
-        // onKeyDown={handleKeyDown}
+        className='w-full border border-grayish min-h-[32px] rounded flex items-center flex-wrap gap-2 p-1'
       >
         {renderTags}
         <input
@@ -86,9 +78,11 @@ const Tags = ({ updateTags, tags }) => {
   )
 }
 
+const singleTagStyles = 'toggle-bg px-1 rounded capitalize text-sm flex items-center'
+
 const Tag = ({ text, deleteTag }) => {
   return (
-    <span className='bg-white px-1 rounded capitalize text-sm flex items-center'>
+    <span className={singleTagStyles}>
       {text} <IoMdClose className='cursor-pointer' onClick={deleteTag.bind(null, text)} />
     </span>
   )

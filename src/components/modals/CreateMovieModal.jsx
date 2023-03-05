@@ -1,31 +1,16 @@
 import React, { useState } from 'react'
 import { postTrailer } from '../../apis/movie'
-import ActorForm from '../ActorForm'
 import Modal from '../Modal'
 import MovieForm from '../MovieForm'
 import ProgressBar from '../ProgressBar'
 import UploadTrailer from '../UploadTrailer'
-import ConfirmModal from './ConfirmModal'
 
-const CreateMovieModal = ({
-  visible,
-  closeModal,
-  forceCloseMovieModal,
-  fillingForm,
-  closeConfirmModal,
-  handleConfirmModal,
-  forceCloseConfirmModal,
-  handleMovieModal,
-  toggleFillingForm,
-}) => {
+const CreateMovieModal = ({ visible, closeModal, toggleFillingForm }) => {
   const [videoSelected, setVideoSelected] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [videoUploaded, setVideoUploaded] = useState(false)
 
   const [trailerInfo, setTrailerInfo] = useState({})
-  const [movieFormVisible, setMovieFormVisible] = useState(false)
-  const [confirmModal, setConfirmModal] = useState(false)
-  // const [fillingForm, setFillingForm] = useState(false)
 
   const handleChange = async file => {
     setVideoSelected(true)
@@ -47,13 +32,13 @@ const CreateMovieModal = ({
 
   return (
     <Modal closeModal={closeModal}>
-      {/* <MovieForm
+      <MovieForm
         trailer={trailerInfo}
         toggleFillingForm={toggleFillingForm}
         videoSelected={videoSelected}
         toggleVideoStates={1}
-      /> */}
-      <UploadTrailer visible={videoSelected} handleChange={handleChange} />
+      />
+      {/* <UploadTrailer visible={videoSelected} handleChange={handleChange} />
       {videoSelected && (
         <>
           <ProgressBar videoUploaded={videoUploaded} videoSelected={videoSelected} uploadProgress={uploadProgress} />
@@ -65,7 +50,7 @@ const CreateMovieModal = ({
             closeModal={closeModal}
           />
         </>
-      )}
+      )} */}
     </Modal>
   )
 }

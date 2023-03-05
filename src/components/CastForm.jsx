@@ -4,6 +4,8 @@ import useNotification from '../hooks/useNotification'
 import LiveSearch from './LiveSearch'
 import CastModal from './modals/CastModal'
 import LiveSearchButton from './LiveSearchButton'
+import Input from './Input'
+import Label from './Label'
 
 const defaultCastInfo = {
   actor: null,
@@ -11,7 +13,7 @@ const defaultCastInfo = {
   roleAs: '',
 }
 
-const CastForm = ({ onClick, cast, toggleWritersModal, deleteCast }) => {
+const CastForm = ({ onClick, cast, deleteCast }) => {
   const { renderNotification } = useNotification()
 
   const [castInfo, setCastInfo] = useState(defaultCastInfo)
@@ -46,37 +48,34 @@ const CastForm = ({ onClick, cast, toggleWritersModal, deleteCast }) => {
   }, [cast])
 
   return (
-    <div className='dark:text-white relative'>
-      <h2 className='text-custom-yellow'>Add Cast & Crew</h2>
+    <div className='relative'>
+      <h2 className='text-accent dark:text-custom-yellow'>Add Cast & Crew</h2>
       <div className='flex gap-2 items-center relative'>
-        <input
+        <Input
           type='checkbox'
           name='leadActor'
           id='leadActor'
-          className='peer'
+          className='peer md:w-fit'
           onChange={handleOnChange}
           checked={leadActor}
         />
-        <label htmlFor='leadActor' className='text-[#aaa] dark:peer-checked:text-white'>
-          Lead Actor
-        </label>
+
+        <Label htmlFor='leadActor' className='text-[16px]'>
+          lead actor
+        </Label>
         <LiveSearchButton active={cast.length} onClick={toggleCastModal} />
       </div>
       <div className='flex gap-2'>
         <div className='flex-1'>
           <LiveSearch name='cast' onClick={updateActor} value={actor?.name} />
         </div>
-        <p>as</p>
-        <input
-          type='text'
-          name='roleAs'
-          placeholder='role as'
-          value={roleAs}
-          onChange={handleOnChange}
-          className='bg-transparent outline-none border-[1px] border-[#aaa] w-28 px-1 rounded dark:focus:border-white'
-          autoComplete='off'
-        />
-        <button type='button' className='bg-custom-yellow px-4 text-black rounded' onClick={handleOnClick}>
+        <p className='toggle-text'>as</p>
+        <Input name='roleAs' placeholder='role as' value={roleAs} onChange={handleOnChange} className='md:w-24 py-0' />
+        <button
+          type='button'
+          className='bg-accent dark:bg-custom-yellow px-4 text-white dark:text-black rounded'
+          onClick={handleOnClick}
+        >
           Add
         </button>
       </div>

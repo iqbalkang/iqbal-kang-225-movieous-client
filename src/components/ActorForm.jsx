@@ -8,7 +8,7 @@ import { ImSpinner2 } from 'react-icons/im'
 
 const modalContainerClasses = 'w-[30rem] dark:bg-modal p-2 py-4 cursor-auto'
 const inputsClasses =
-  'w-3/4 bg-transparent capitalize border-b border-b-[#aaa] dark:text-white outline-none dark:focus:border-b-white'
+  'w-3/4 bg-transparent capitalize border-b border-b-grayish dark:text-white outline-none dark:focus:border-b-white'
 
 const defaultActorInfo = {
   image: null,

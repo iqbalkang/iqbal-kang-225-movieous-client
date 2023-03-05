@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { ImSpinner2 } from 'react-icons/im'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { postForgotPassword } from '../apis/requests'
 import AuthCard from '../components/AuthCard'
-import Button from '../components/Button'
+import SubmitButton from '../components/SubmitButton'
 import Form from '../components/Form'
 import FormRow from '../components/FormRow'
 import VerticalContainer from '../components/VerticalContainer'
@@ -40,14 +39,12 @@ const ForgotPassword = () => {
     }
   }
 
-  const renderButtonText = isLoading ? <ImSpinner2 className='animate-spin' /> : 'send link'
-
   return (
     <VerticalContainer>
       <AuthCard title='please enter your email'>
         <Form onSubmit={submitHandler}>
           <FormRow placeholder='johndoe@gmail.com' name='email' value={email} onchange={changeHandler} />
-          <Button>{renderButtonText}</Button>
+          <SubmitButton uploading={isLoading} text='send link' />
         </Form>
       </AuthCard>
     </VerticalContainer>

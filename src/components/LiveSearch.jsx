@@ -1,30 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { searchActor } from '../apis/actor'
+import Input from './Input'
 
 const LiveSearch = ({ name, onClick, value }) => {
-  // console.log(value)
   const resultRef = useRef()
   const inputRef = useRef()
   const [input, setInput] = useState('')
   const [results, setResults] = useState([])
   const [resultsVisible, setResultsVisible] = useState(false)
   const [focusedIndex, setFocusedIndex] = useState(-1)
-  // const [modalVisible, setModalVisible] = useState(false)
-  // const [firstRender, setFirstRender] = useState(true)
 
   const handleOnFocus = () => results.length && setResultsVisible(true)
 
   const handleOnBlur = () => setResultsVisible(false)
-
-  // useEffect(() => {
-  //   setInput('')
-  // }, [resetInput])
-
-  // console.log(results)
-
-  // useEffect(() => {
-  //   setInput(val)
-  // }, [val])
 
   useEffect(() => {
     if (!input) {
@@ -47,17 +35,12 @@ const LiveSearch = ({ name, onClick, value }) => {
     setInput('')
   }, [value])
 
-  // useEffect(() => {
-  //   if (value) setInput(value)
-  // }, [value])
-
   const handleOnChange = e => {
     const { value } = e.target
     setInput(value)
   }
 
   const handleOnSelect = result => {
-    // console.log(result)
     onClick(result)
     if (name === 'writers') return setInput('')
     if (name === 'cast') return setInput('')
@@ -92,10 +75,6 @@ const LiveSearch = ({ name, onClick, value }) => {
     }
   }
 
-  const handleButtonClick = () => {
-    // toggleWritersModal()
-  }
-
   const renderResultsFields = results.map((result, index) => {
     return (
       <ResultCard
@@ -111,19 +90,18 @@ const LiveSearch = ({ name, onClick, value }) => {
 
   return (
     <>
-      <input
+      <Input
+        className='py-0 px-1 capitalize md:w-full'
+        placeholder='search profile'
         ref={inputRef}
         type='text'
         name={name}
         id={name}
         value={input}
         onChange={handleOnChange}
-        placeholder='search profile'
-        className='capitalize w-full bg-transparent outline-none rounded border-[#aaa] border-[1px] dark:focus:border-white focus:border-black peer dark:text-white px-1'
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         onKeyDown={handleOnKeyDown}
-        autoComplete='off'
       />
 
       <ResultsContainer visible={resultsVisible}> {renderResultsFields} </ResultsContainer>
@@ -133,14 +111,13 @@ const LiveSearch = ({ name, onClick, value }) => {
 
 export default LiveSearch
 
+const resultContainerStyles =
+  'absolute z-20 left-0 right-0 top-full mt-2 rounded overflow-hidden overflow-y-scroll max-h-60 shadow-md bg-background text-white'
+
 const ResultsContainer = ({ visible, children }) => {
   if (!visible) return null
 
-  return (
-    <div className='absolute z-20 left-0 right-0 top-full mt-2 rounded overflow-hidden overflow-y-scroll max-h-60 shadow-md bg-[#aaa] dark:bg-background dark:text-white'>
-      {children}
-    </div>
-  )
+  return <div className={resultContainerStyles}>{children}</div>
 }
 
 const ResultCard = ({ result, onMouseDown, index, focusedIndex, resultRef }) => {
@@ -154,8 +131,8 @@ const ResultCard = ({ result, onMouseDown, index, focusedIndex, resultRef }) => 
     <div
       ref={index === focusedIndex ? resultRef : null}
       className={`${
-        index === focusedIndex ? 'bg-white dark:bg-[#aaa] ' : ''
-      } flex items-center capitalize gap-3 p-1 hover:bg-white dark:hover:bg-[#aaa] cursor-pointer`}
+        index === focusedIndex ? 'bg-grayish dark:bg-grayish ' : ''
+      } flex items-center capitalize gap-3 p-1 hover:bg-grayish dark:hover:bg-grayish cursor-pointer`}
       onMouseDown={onMouseDown.bind(null, result)}
     >
       <img src={image} alt='' className='w-14 h-14 object-cover rounded-full' />

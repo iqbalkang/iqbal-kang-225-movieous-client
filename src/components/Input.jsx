@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
-const Input = ({ className, placeholder, type, id, name, value, onchange, ...rest }) => {
+const Input = forwardRef((props, ref) => {
+  const { className, placeholder, type, id, name, value, onchange, ...rest } = props
   return (
     <input
-      className={`outline-none bg-transparent rounded border border-[#aaa] px-2 py-1 md:w-72 focus:border-black dark:focus:border-white duration-300 ${className}`}
+      className={`toggle-input outline-none bg-transparent rounded px-2 py-1 duration-300 peer ${className}`}
       placeholder={placeholder}
       type={type}
       id={id}
       name={name}
       onChange={onchange}
       value={value}
+      autoComplete='off'
       {...rest}
     />
   )
-}
+})
 
 export default Input

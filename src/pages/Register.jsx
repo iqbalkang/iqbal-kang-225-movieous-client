@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { postRegister } from '../apis/requests'
 import AuthCard from '../components/AuthCard'
-import Button from '../components/Button'
+import SubmitButton from '../components/SubmitButton'
 import Form from '../components/Form'
 import FormRow from '../components/FormRow'
 import VerticalContainer from '../components/VerticalContainer'
@@ -60,7 +60,7 @@ const Register = () => {
           <FormRow placeholder='John Doe' name='name' value={name} onchange={changeHandler} />
           <FormRow placeholder='johndoe@gmail.com' name='email' value={email} onchange={changeHandler} />
           <FormRow placeholder='******' type='password' name='password' value={password} onchange={changeHandler} />
-          <Button>Register</Button>
+          <SubmitButton text='register' />
           <div className='flex justify-between'>
             <Link to='/forgot-password' className='hover:text-accent duration-200'>
               Forgot password

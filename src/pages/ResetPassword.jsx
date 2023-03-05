@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { postResetPassword, postVerifyResetPasswordToken } from '../apis/requests'
 import AuthCard from '../components/AuthCard'
-import Button from '../components/Button'
+import SubmitButton from '../components/SubmitButton'
 import Form from '../components/Form'
 import FormRow from '../components/FormRow'
 import VerticalContainer from '../components/VerticalContainer'
@@ -91,7 +91,7 @@ const ResetPassword = () => {
               value={confirmPassword}
               onchange={changeHandler}
             />
-            <Button>confirm</Button>
+            <SubmitButton text='confirm' />
           </Form>
         </fieldset>
       </AuthCard>

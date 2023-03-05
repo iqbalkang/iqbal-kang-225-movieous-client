@@ -11,11 +11,11 @@ const PosterUploader = ({ onChange, selectedPoster, className }) => {
         hidden
         onChange={onChange}
       />
-      <label htmlFor='poster' className='cursor-pointer dark:text-[#aaa]'>
+      <label htmlFor='poster' className='cursor-pointer text-grayish'>
         {selectedPoster ? (
           <img src={selectedPoster} className={`rounded ${className}`} />
         ) : (
-          <div className='border border-[#aaa] border-dashed h-36 flex justify-center items-center rounded'>
+          <div className='border border-grayish border-dashed h-36 flex justify-center items-center rounded'>
             <p>Select Poster</p>
           </div>
         )}

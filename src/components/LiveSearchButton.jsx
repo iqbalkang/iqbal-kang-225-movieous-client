@@ -3,7 +3,7 @@ import React from 'react'
 const LiveSearchButton = ({ active, onClick }) => {
   const handleOnClick = () => onClick()
 
-  const renderClasses = active ? 'text-white' : 'text-[#aaa] cursor-not-allowed '
+  const renderClasses = active ? 'toggle-text' : 'text-grayish cursor-not-allowed '
 
   return (
     <button

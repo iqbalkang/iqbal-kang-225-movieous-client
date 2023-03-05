@@ -9,12 +9,15 @@ import { languageOptions, statusOptions, typeOptions } from '../utils/options'
 import useNotification from '../hooks/useNotification'
 import { postMovie, updateMovie } from '../apis/movie'
 import validateMovie from '../utils/validateMovie'
-import { ImSpinner2 } from 'react-icons/im'
+
 import WritersModal from './modals/WritersModal'
 import LiveSearch from './LiveSearch'
 import LiveSearchLabel from './LiveSearchLabel'
 import LiveSearchButton from './LiveSearchButton'
 import useConfirm from '../hooks/useConfirm'
+import SubmitButton from './SubmitButton'
+import Input from './Input'
+import Label from './Label'
 
 const defaultMovieInfo = {
   title: '',
@@ -31,6 +34,10 @@ const defaultMovieInfo = {
   poster: {},
   trailer: {},
 }
+
+const formRowStyles = 'flex flex-col-reverse '
+const inputStyles =
+  'bg-transparent capitalize outline-none border-b-grayish dark:border-b-grayish border-b-[1px] toggle-text focus:border-b-black dark:focus:border-b-white peer '
 
 const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingForm }) => {
   const { renderNotification } = useNotification()
@@ -167,7 +174,7 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
     }
   }, [selectedMovie])
 
-  // console.log(genre)
+  console.log(movieInfo)
 
   return (
     <form
@@ -185,7 +192,7 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
 
       {/* left side */}
       <div className='space-y-4'>
-        <div className='flex flex-col-reverse'>
+        <div className={formRowStyles}>
           <input
             type='text'
             id='title'
@@ -193,41 +200,31 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
             value={title}
             onChange={handleOnChange}
             placeholder='interstellar'
-            className='bg-transparent capitalize outline-none border-b-[#aaa] dark:border-b-[#aaa] border-b-[1px] text-white focus:border-b-black dark:focus:border-b-white peer'
+            className={inputStyles}
           />
-          <label
-            htmlFor='title'
-            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
-          >
-            title
-          </label>
+          <Label htmlFor='title'> title </Label>
         </div>
 
-        <div className='flex flex-col-reverse'>
+        <div className={formRowStyles}>
           <textarea
             id='storyLine'
             name='storyLine'
             value={storyLine}
             onChange={handleOnChange}
             placeholder='movie story line...'
-            className='capitalize h-20 bg-transparent outline-none border-b-[#aaa] dark:border-b-[#aaa] border-b-[1px] text-white focus:border-b-black dark:focus:border-b-white peer resize-none'
+            className={inputStyles + 'h-20 resize-none'}
           ></textarea>
-          <label
-            htmlFor='storyLine'
-            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
-          >
-            Storyline
-          </label>
+          <Label htmlFor='storyLine'> storyline </Label>
         </div>
 
         <Tags updateTags={updateTags} tags={tags} />
 
-        <div className='flex flex-col-reverse relative'>
+        <div className={formRowStyles + 'relative'}>
           <LiveSearch name='director' onClick={updateDirector} value={director?.name} />
           <LiveSearchLabel name='director' />
         </div>
 
-        <div className='flex flex-col-reverse relative'>
+        <div className={formRowStyles + 'relative'}>
           <LiveSearch name='writers' onClick={updateWriters} value={writers?.name} />
           <LiveSearchLabel name='writers' badge={true} count={writers.length} />
           <LiveSearchButton active={writers.length} onClick={toggleWritersModal} />
@@ -241,21 +238,16 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
           deleteCast={handleDeleteCast}
         />
 
-        <div className='flex flex-col-reverse'>
-          <input
+        <div className={formRowStyles}>
+          <Input
+            className='py-0 md:w-fit cursor-pointer text-white'
             type='date'
             id='releaseDate'
             name='releaseDate'
             value={releaseDate.split('T')[0]}
             onChange={handleOnChange}
-            className='px-1 self-start cursor-pointer bg-transparent outline-none border-[#aaa] dark:border-[#aaa] border-[1px] rounded text-white focus:border-black dark:focus:border-white peer'
           />
-          <label
-            htmlFor='releaseDate'
-            className='text-[#aaa] capitalize text-sm cursor-pointer peer-focus:text-black dark:peer-focus:text-white self-start'
-          >
-            release date
-          </label>
+          <Label htmlFor='releaseDate'> release date </Label>
         </div>
       </div>
       {/* Right side */}
@@ -267,9 +259,7 @@ const MovieForm = ({ trailer, selectedMovie, toggleVideoStates, toggleFillingFor
         <Select label='status' name='status' options={statusOptions} value={status} onChange={handleOnChange} />
       </div>
 
-      <button className='dark:bg-white rounded h-8 flex justify-center items-center'>
-        {uploading ? <ImSpinner2 className='animate-spin' /> : 'Upload Movie'}
-      </button>
+      <SubmitButton text='upload movie' uploading={uploading} />
     </form>
   )
 }

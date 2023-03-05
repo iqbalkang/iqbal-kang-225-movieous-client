@@ -2,12 +2,6 @@ import React, { useState, useRef } from 'react'
 import Search from './Search'
 import ThemeToggler from './ThemeToggler'
 import { IoAddOutline } from 'react-icons/io5'
-import Modal from './Modal'
-import MovieForm from './MovieForm'
-import UploadTrailer from './UploadTrailer'
-import ActorForm from './ActorForm'
-import { postTrailer } from '../apis/movie'
-import ProgressBar from './ProgressBar'
 import { useNavigate } from 'react-router-dom'
 import CreateActorModal from './modals/CreateActorModal'
 import CreateMovieModal from './modals/CreateMovieModal'
@@ -18,18 +12,12 @@ const AuthHeader = () => {
   const navigate = useNavigate()
   const [createButton, setCreateButton] = useState(false)
   const [actorModal, setActorModal] = useState(false)
-  // const [movieModal, setMovieModal] = useState(false) //temp
-  // const [confirmModal, setConfirmModal] = useState(false)
-  // const [fillingForm, setFillingForm] = useState(false)
 
   const {
     confirmModal,
     fillingForm,
     setConfirmModal,
-    setFillingForm,
-    toggleModal,
     setMovieModal,
-    movieModal,
     closeConfirmModal,
     forceCloseModals,
     toggleFillingForm,
@@ -45,51 +33,7 @@ const AuthHeader = () => {
     setCreateMovieModal(prevState => !prevState)
   }
 
-  // const closeConfirmModal = () => {
-  //   setConfirmModal(false)
-  // }
-
-  // const toggleFillingForm = () => {
-  //   // setConfirmModal(true)
-  //   setFillingForm(true)
-  // }
-
-  // const forceCloseModals = () => {
-  //   setFillingForm(false)
-  //   setMovieModal(false)
-  //   setConfirmModal(false)
-  // }
-
-  // console.log(fillingForm)
-
-  // const closeConfirmModal = () => {
-  //   console.log(fillingForm)
-  //   if (fillingForm) return setConfirmModal(true)
-  //   setConfirmModal(false)
-  //   // closeModal()
-  // }
-
   const forceCloseConfirmModal = () => setConfirmModal(false)
-  // const [videoSelected, setVideoSelected] = useState(false)
-  // const [uploadProgress, setUploadProgress] = useState(0)
-  // const [videoUploaded, setVideoUploaded] = useState(false)
-  // const [trailerInfo, setTrailerInfo] = useState({})
-
-  // const handleChange = async file => {
-  //   setVideoSelected(true)
-  //   const trailer = new FormData()
-  //   trailer.append('trailer', file)
-
-  //   const { data } = await postTrailer(trailer, setUploadProgress)
-  //   setTrailerInfo(data)
-  //   setVideoUploaded(true)
-  // }
-
-  // const toggleVideoStates = () => {
-  //   setVideoSelected(false)
-  //   setUploadProgress(0)
-  //   setVideoUploaded(false)
-  // }
 
   const menuRef = useRef()
   const buttonRef = useRef()
@@ -110,27 +54,14 @@ const AuthHeader = () => {
 
   return (
     <header className='flex justify-between items-center'>
-      {/* {movieModal && (
-        <Modal closeModal={handleMovieModal}>
-          <UploadTrailer handleChange={handleChange} visible={videoSelected} />
-          <ProgressBar videoUploaded={videoUploaded} videoSelected={videoSelected} uploadProgress={uploadProgress} />
-          <MovieForm
-            visible={videoSelected}
-            trailer={trailerInfo}
-            closeModal={handleMovieModal}
-            toggleVideoStates={toggleVideoStates}
-          />
-        </Modal>
-      )} */}
-
       <CreateMovieModal
         visible={createMovieModal}
         closeModal={handleMovieModal}
-        forceCloseMovieModal={forceCloseMovieModal}
-        fillingForm={fillingForm}
         toggleFillingForm={toggleFillingForm}
-        closeConfirmModal={closeConfirmModal}
-        forceCloseConfirmModal={forceCloseConfirmModal}
+        // forceCloseMovieModal={forceCloseMovieModal}
+        // fillingForm={fillingForm}
+        // closeConfirmModal={closeConfirmModal}
+        // forceCloseConfirmModal={forceCloseConfirmModal}
       />
 
       <CreateActorModal visible={actorModal} closeModal={handleActorModal} />
@@ -146,14 +77,14 @@ const AuthHeader = () => {
           <button
             ref={buttonRef}
             onClick={toggleCreateButton}
-            className='flex items-center border border-[#aaa] px-2 py-1 hover:bg-gray-800 hover:text-white'
+            className='flex items-center border border-grayish px-2 py-1 hover:bg-gray-800 hover:text-white'
           >
             Create <IoAddOutline className='pointer-events-none' />
           </button>
           {createButton && (
             <div className='absolute right-0 top-[110%] bg-gray-800 w-[100px]' ref={menuRef}>
               <button
-                className='py-1 border-b border-[#aaa] w-full hover:bg-gray-500 hover:text-white'
+                className='py-1 border-b border-grayish w-full hover:bg-gray-500 hover:text-white'
                 onClick={handleActorModal}
               >
                 Add Actor

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import Button from '../Button'
 import Modal from '../Modal'
 
 const ConfirmModal = ({ visible, closeModal, forceCloseModals }) => {
@@ -11,12 +12,12 @@ const ConfirmModal = ({ visible, closeModal, forceCloseModals }) => {
         <p className='first-letter:capitalize'>this action will cancel uploading movie.</p>
       </div>
       <div className='flex gap-2 mt-4'>
-        <button className='bg-red-400 text-white p-1 px-4 rounded capitalize' onClick={forceCloseModals}>
+        <Button className='bg-red-400 text-white' onClick={forceCloseModals}>
           confirm
-        </button>
-        <button className='bg-blue-400 text-white p-1 px-4 rounded capitalize' onClick={closeModal}>
+        </Button>
+        <Button className='bg-blue-400 text-white' onClick={closeModal}>
           cancel
-        </button>
+        </Button>
       </div>
     </Modal>
   )
