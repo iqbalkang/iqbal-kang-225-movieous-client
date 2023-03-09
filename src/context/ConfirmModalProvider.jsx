@@ -5,29 +5,29 @@ export const ConfirmModalContext = createContext()
 const ConfirmModalProvider = ({ children }) => {
   const [confirmModal, setConfirmModal] = useState(false)
   const [fillingForm, setFillingForm] = useState(false)
-  const [movieModal, setMovieModal] = useState(false)
   const [createMovieModal, setCreateMovieModal] = useState(false)
+  const [updateMovieModal, setUpdateMovieModal] = useState(false)
   const [selectedMovie, setSelectedMovie] = useState(null)
 
-  // console.log(fillingForm)
+  const toggleFillingForm = () => setFillingForm(true)
 
-  const toggleModal = () => {
+  const toggleCreateMovieModal = () => {
     if (fillingForm) return setConfirmModal(true)
-    setMovieModal(prevState => !prevState)
+    setCreateMovieModal(prevState => !prevState)
+  }
+
+  const toggleUpdateMovieModal = () => {
+    if (fillingForm) return setConfirmModal(true)
+    setUpdateMovieModal(prevState => !prevState)
   }
 
   const closeConfirmModal = () => {
     setConfirmModal(false)
   }
 
-  const toggleFillingForm = () => {
-    // setConfirmModal(true)
-    setFillingForm(true)
-  }
-
   const forceCloseModals = () => {
     setFillingForm(false)
-    setMovieModal(false)
+    setUpdateMovieModal(false)
     setConfirmModal(false)
     setCreateMovieModal(false)
     setSelectedMovie(null)
@@ -36,13 +36,14 @@ const ConfirmModalProvider = ({ children }) => {
   return (
     <ConfirmModalContext.Provider
       value={{
+        toggleCreateMovieModal,
         confirmModal,
         fillingForm,
         setConfirmModal,
         setFillingForm,
-        toggleModal,
-        movieModal,
-        setMovieModal,
+        toggleUpdateMovieModal,
+        updateMovieModal,
+        setUpdateMovieModal,
         closeConfirmModal,
         forceCloseModals,
         toggleFillingForm,

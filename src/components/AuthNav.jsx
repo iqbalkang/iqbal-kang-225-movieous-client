@@ -28,18 +28,13 @@ const menuItems = [
 
 const AuthNav = () => {
   const navigate = useNavigate()
-  const { authInfo, logout } = useAuth()
+  const { logout } = useAuth()
   const { darkMode } = useTheme()
-  const { user } = authInfo
 
   const handleLogout = () => {
     logout()
     navigate('/')
   }
-
-  // useEffect(() => {
-  //   if (!user) navigate('/login')
-  // }, user)
 
   const renderLogo = <img src={darkMode ? logo : logoDark} alt='movieous logo' className='h-6 sm:h-8' />
 

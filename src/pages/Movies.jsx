@@ -1,79 +1,65 @@
 import React, { useState, useEffect } from 'react'
 import Movie from '../components/Movie'
 import Pagination from '../components/Pagination'
-import MovieForm from '../components/MovieForm'
-import Modal from '../components/Modal'
-import { getMovie } from '../apis/movie'
+import { deleteMovie, getMovie } from '../apis/movie'
 import useMovies from '../hooks/useMovies'
 import useConfirm from '../hooks/useConfirm'
-import ConfirmModal from '../components/modals/ConfirmModal'
-import CreateMovieModal from '../components/modals/CreateMovieModal'
 import UpdateMovieModal from '../components/modals/UpdateMovieModal'
+import ConfirmModal from '../components/modals/ConfirmModal'
 
 const Movies = () => {
-  const {
-    confirmModal,
-    fillingForm,
-    setConfirmModal,
-    setFillingForm,
-    toggleModal,
-    setMovieModal,
-    movieModal,
-    closeConfirmModal,
-    forceCloseModals,
-    toggleFillingForm,
-    selectedMovie,
-    setSelectedMovie,
-  } = useConfirm()
+  const { toggleUpdateMovieModal, updateMovieModal, selectedMovie, setSelectedMovie } = useConfirm()
 
-  // const [movieModal, setMovieModal] = useState(false)
-  // const [selectedMovie, setSelectedMovie] = useState(null)
+  const [confirmModal, setConfirmModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [selectedMovieId, setSelectedMovieId] = useState('')
 
   const { fetchMovies, currentPage, handleNext, handlePrev, movies } = useMovies()
 
-  // const toggleModal = () => setMovieModal(prevState => !prevState)
-
   const handleOnMovieEdit = async id => {
-    toggleModal()
+    toggleUpdateMovieModal()
     const { data, error } = await getMovie(id)
     if (error) return console.log(error)
     setSelectedMovie(data.movie)
   }
 
+  const handleOnMovieDelete = async id => {
+    setLoading(true)
+    const { data, error } = await deleteMovie(selectedMovieId)
+    if (error) return console.log(error)
+    setLoading(false)
+    setConfirmModal(false)
+    if (data.status === 'success') await fetchMovies()
+  }
+
+  const openConfirmModal = id => {
+    setConfirmModal(prevState => !prevState)
+    setSelectedMovieId(id)
+  }
+
+  const closeConfirmModal = () => setConfirmModal(false)
+
   useEffect(() => {
     fetchMovies()
   }, [currentPage])
 
-  const renderMovies = movies.map(movie => <Movie key={movie._id} movie={movie} onEdit={handleOnMovieEdit} />)
+  const renderMovies = movies.map(movie => (
+    <Movie key={movie._id} movie={movie} onEdit={handleOnMovieEdit} onDelete={openConfirmModal} />
+  ))
 
   return (
     <div className='grid max-w-3xl'>
       <div className='divide-black dark:divide-white divide-y-2'>{renderMovies}</div>
       <Pagination handlePrev={handlePrev} handleNext={handleNext} />
 
-      <UpdateMovieModal
-        visible={movieModal}
-        closeModal={setMovieModal}
-        toggleFillingForm={toggleFillingForm}
-        selectedMovie={selectedMovie}
-        toggleModal={toggleModal}
-
-        // fillingForm={fillingForm}
-        // closeConfirmModal={closeConfirmModal}
-        // forceCloseConfirmModal={forceCloseConfirmModal}
+      <UpdateMovieModal visible={updateMovieModal} closeModal={toggleUpdateMovieModal} selectedMovie={selectedMovie} />
+      <ConfirmModal
+        visible={confirmModal}
+        closeModal={closeConfirmModal}
+        forceCloseModals={handleOnMovieDelete}
+        text='this action will permanently delete the movie.'
+        loading={loading}
       />
-
-      {/* {movieModal && (
-        <Modal closeModal={toggleModal}>
-          <MovieForm
-            visible={movieModal}
-            closeModal={setMovieModal}
-            toggleFillingForm={toggleFillingForm}
-            selectedMovie={selectedMovie}
-          />
-        </Modal>
-      )} */}
-      {/* <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} /> */}
     </div>
   )
 }

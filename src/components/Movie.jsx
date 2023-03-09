@@ -1,9 +1,13 @@
 import React from 'react'
 import { MdDeleteOutline, MdOutlineModeEditOutline, MdOpenInFull } from 'react-icons/md'
 
-const Movie = ({ movie, onEdit }) => {
+const Movie = ({ movie, onEdit, onDelete }) => {
   const handleOnEditClick = id => {
     onEdit(id)
+  }
+
+  const handleOnDeleteClick = id => {
+    onDelete(id)
   }
 
   const { title, genre = [], status, poster } = movie
@@ -26,7 +30,7 @@ const Movie = ({ movie, onEdit }) => {
 
       <div className='flex gap-2'>
         <button>
-          <MdDeleteOutline />
+          <MdDeleteOutline onClick={handleOnDeleteClick.bind(null, movie._id)} />
         </button>
         <button onClick={handleOnEditClick.bind(null, movie._id)}>
           <MdOutlineModeEditOutline />

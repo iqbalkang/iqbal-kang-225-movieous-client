@@ -8,6 +8,7 @@ const removeLocalStorage = key => {
 
 const getLocalStorage = key => {
   let data = localStorage.getItem(key)
+  // console.log(JSON.parse(data))
 
   return (data = data ? JSON.parse(data) : null)
 }

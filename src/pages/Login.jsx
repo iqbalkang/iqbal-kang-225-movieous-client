@@ -39,8 +39,8 @@ const Login = () => {
   }
 
   useEffect(() => {
+    // if (user) navigate('/', { replace: true })
     if (user) navigate('/')
-
     if (error) renderNotification('error', error)
   }, [user, error])
 

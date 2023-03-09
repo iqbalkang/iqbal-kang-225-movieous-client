@@ -5,7 +5,6 @@ import { IoAddOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
 import CreateActorModal from './modals/CreateActorModal'
 import CreateMovieModal from './modals/CreateMovieModal'
-import ConfirmModal from './modals/ConfirmModal'
 import useConfirm from '../hooks/useConfirm'
 
 const AuthHeader = () => {
@@ -13,27 +12,10 @@ const AuthHeader = () => {
   const [createButton, setCreateButton] = useState(false)
   const [actorModal, setActorModal] = useState(false)
 
-  const {
-    confirmModal,
-    fillingForm,
-    setConfirmModal,
-    setMovieModal,
-    closeConfirmModal,
-    forceCloseModals,
-    toggleFillingForm,
-    createMovieModal,
-    setCreateMovieModal,
-  } = useConfirm()
+  const { toggleFillingForm, createMovieModal, toggleCreateMovieModal } = useConfirm()
 
   const handleActorModal = () => setActorModal(prevState => !prevState)
   const toggleCreateButton = () => setCreateButton(prevState => !prevState)
-
-  const handleMovieModal = () => {
-    if (fillingForm) return setConfirmModal(true)
-    setCreateMovieModal(prevState => !prevState)
-  }
-
-  const forceCloseConfirmModal = () => setConfirmModal(false)
 
   const menuRef = useRef()
   const buttonRef = useRef()
@@ -50,23 +32,15 @@ const AuthHeader = () => {
     navigate(-1)
   }
 
-  const forceCloseMovieModal = () => setMovieModal(false)
-
   return (
     <header className='flex justify-between items-center'>
       <CreateMovieModal
         visible={createMovieModal}
-        closeModal={handleMovieModal}
+        closeModal={toggleCreateMovieModal}
         toggleFillingForm={toggleFillingForm}
-        // forceCloseMovieModal={forceCloseMovieModal}
-        // fillingForm={fillingForm}
-        // closeConfirmModal={closeConfirmModal}
-        // forceCloseConfirmModal={forceCloseConfirmModal}
       />
 
       <CreateActorModal visible={actorModal} closeModal={handleActorModal} />
-
-      {/* <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={forceCloseModals} /> */}
 
       <Search placeholder='search movies' onSubmit={handleSearchSubmit} onReset={handleSearchReset} />
 
@@ -89,7 +63,7 @@ const AuthHeader = () => {
               >
                 Add Actor
               </button>
-              <button className='py-1 hover:bg-gray-500 w-full hover:text-white' onClick={handleMovieModal}>
+              <button className='py-1 hover:bg-gray-500 w-full hover:text-white' onClick={toggleCreateMovieModal}>
                 Add Movie
               </button>
             </div>

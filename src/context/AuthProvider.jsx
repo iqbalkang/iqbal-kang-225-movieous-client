@@ -1,12 +1,13 @@
 import { postLogin, postVerify } from '../apis/requests'
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../utils/localStorage'
 
-const { useState, createContext } = require('react')
+import { useNavigate } from 'react-router-dom'
+import { useState, createContext, useEffect } from 'react'
 
 const AuthContext = createContext()
 
 const initialState = {
-  user: getLocalStorage('user'),
+  user: null,
   isLoading: false,
   error: '',
   success: '',
@@ -14,6 +15,11 @@ const initialState = {
 
 const AuthProvider = ({ children }) => {
   const [authInfo, setAuthInfo] = useState(initialState)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setAuthInfo({ ...initialState, user: getLocalStorage('user') })
+  }, [])
 
   const signIn = async userInfo => {
     setAuthInfo({ ...initialState, isLoading: true })
@@ -22,6 +28,7 @@ const AuthProvider = ({ children }) => {
 
     if (error) return setAuthInfo({ ...initialState, isLoading: false, error: error.message })
 
+    navigate('/', { replace: true })
     setAuthInfo({ ...initialState, isLoading: false, user: data.user })
     setLocalStorage('user', data.user)
   }
@@ -39,7 +46,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     removeLocalStorage('user')
-    setAuthInfo(initialState)
+    setAuthInfo({ ...initialState, user: null })
   }
 
   return <AuthContext.Provider value={{ authInfo, signIn, verifyEmail, logout }}> {children} </AuthContext.Provider>

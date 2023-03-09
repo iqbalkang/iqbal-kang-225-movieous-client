@@ -28,6 +28,7 @@ const postMovie = async movieInfo => {
 }
 
 const updateMovie = async (id, movieInfo) => {
+  console.log(id)
   try {
     const { data } = await customFetch.patch(`/movie/${id}`, movieInfo)
     return { data }
@@ -75,4 +76,17 @@ const searchMovie = async title => {
   }
 }
 
-export { postTrailer, postMovie, getMovies, getMovie, updateMovie, searchMovie }
+const deleteMovie = async id => {
+  try {
+    const { data } = await customFetch.delete(`/movie/${id}`)
+    console.log(data)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export { postTrailer, postMovie, getMovies, getMovie, updateMovie, searchMovie, deleteMovie }

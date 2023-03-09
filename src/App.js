@@ -13,11 +13,11 @@ function App() {
   const { authInfo } = useAuth()
   const { user } = authInfo
   const navigate = useNavigate()
-  if (user?.isAdmin) return <AdminRouter />
 
-  // useEffect(() => {
-  //   if (user?.isAdmin) navigate('/')
-  // }, [user])
+  // console.log(user)
+  if (user?.isAdmin) {
+    return <AdminRouter />
+  }
 
   return (
     <div className='dark:bg-body bg-white text-[#555] dark:text-[#ddd] min-h-screen'>

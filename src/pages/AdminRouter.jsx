@@ -10,6 +10,7 @@ const AdminRouter = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    // navigate('/', { replace: true })
     navigate('/')
   }, [])
 

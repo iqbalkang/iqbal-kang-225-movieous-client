@@ -19,6 +19,7 @@ import SubmitButton from './SubmitButton'
 import Input from './Input'
 import Label from './Label'
 import ConfirmModal from './modals/ConfirmModal'
+import useMovies from '../hooks/useMovies'
 
 const defaultMovieInfo = {
   title: '',
@@ -42,22 +43,13 @@ const inputStyles =
 
 const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates }) => {
   const { renderNotification } = useNotification()
-  const {
-    confirmModal,
-    fillingForm,
-    setConfirmModal,
-    setMovieModal,
-    closeConfirmModal,
-    forceCloseModals,
-    toggleFillingForm,
-    createMovieModal,
-    setCreateMovieModal,
-  } = useConfirm()
+  const { confirmModal, closeConfirmModal, forceCloseModals, toggleFillingForm } = useConfirm()
+  const { fetchMovies, fetchLatestMovies } = useMovies()
 
   const [movieInfo, setMovieInfo] = useState(defaultMovieInfo)
   const [writersModal, setWritersModal] = useState(false)
   const [selectedPoster, setSelectedPoster] = useState('')
-  const [showGenresModal, setShowGenresModal] = useState(false)
+  const [genresModal, setGenresModal] = useState(false)
   const [uploading, setUploading] = useState(false)
 
   const { title, storyLine, director, writers, genre, tags, cast, releaseDate, type, language, status } = movieInfo
@@ -100,7 +92,7 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
   }
 
   const toggleWritersModal = () => setWritersModal(prevState => !prevState)
-  const toggleGenresModal = () => setShowGenresModal(prevState => !prevState)
+  const toggleGenresModal = () => setGenresModal(prevState => !prevState)
 
   const handleDeleteWriter = writer => {
     const remainingWriters = writers.filter(singleWriter => singleWriter.name !== writer.name)
@@ -137,7 +129,7 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
     if (cast?.length) {
       const finalCast = cast.map(c => {
         return {
-          actor: c.actor?._id,
+          actor: c.actor?.actorId,
           roleAs: c.roleAs,
           leadActor: c.leadActor,
         }
@@ -154,11 +146,12 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
     }
 
     if (selectedMovie) {
-      const { data, error: err } = await updateMovie(selectedMovie._id, formData)
+      const { data, error: err } = await updateMovie(selectedMovie.id, formData)
       setUploading(false)
       console.log(err)
       if (err) return renderNotification('error', err)
       if (data) renderNotification('success', 'Movie updated successfully')
+      await fetchMovies()
       return forceCloseModals()
     }
 
@@ -167,6 +160,8 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
 
     if (err) return renderNotification('error', err)
     if (data) renderNotification('success', 'Movie created successfully')
+    await fetchMovies()
+    await fetchLatestMovies(4)
     forceCloseModals()
     toggleVideoStates()
   }
@@ -191,7 +186,7 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
     forceCloseModals()
   }
 
-  console.log(movieInfo)
+  // console.log(movieInfo.cast)
 
   return (
     <form
@@ -205,9 +200,14 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
         handleDeleteWriter={handleDeleteWriter}
       />
 
-      <GenreModal visible={showGenresModal} closeModal={toggleGenresModal} updateGenres={updateGenres} genre={genre} />
+      <GenreModal visible={genresModal} closeModal={toggleGenresModal} updateGenres={updateGenres} genre={genre} />
 
-      <ConfirmModal visible={confirmModal} closeModal={closeConfirmModal} forceCloseModals={superForce} />
+      <ConfirmModal
+        visible={confirmModal}
+        closeModal={closeConfirmModal}
+        forceCloseModals={superForce}
+        text='this action will cancel uploading movie.'
+      />
 
       {/* left side */}
       <div className='space-y-4'>
