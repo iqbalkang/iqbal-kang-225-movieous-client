@@ -13,7 +13,7 @@ const Movie = ({ movie, onEdit, onDelete }) => {
   const { title, genre = [], status, poster } = movie
   return (
     <div className='flex gap-4 items-center py-2'>
-      <img className='w-20 aspect-video h-24' src={poster?.url} alt='' />
+      <img className='aspect-square w-28 object-cover' src={poster?.url} alt='' />
 
       <div className='flex-1'>
         <h3 className='capitalize font-bold text-sm'>{title}</h3>

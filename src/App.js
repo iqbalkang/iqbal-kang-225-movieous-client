@@ -8,6 +8,8 @@ import Verification from './pages/Verification'
 import useAuth from './hooks/useAuth'
 import AdminRouter from './pages/AdminRouter'
 import { useEffect } from 'react'
+import Dashboard from './pages/Dashboard'
+import SingleMovie from './components/users/SingleMovie'
 
 function App() {
   const { authInfo } = useAuth()
@@ -23,11 +25,13 @@ function App() {
     <div className='dark:bg-body bg-white text-[#555] dark:text-[#ddd] min-h-screen'>
       <Routes>
         <Route path='/' element={<Home />}>
+          <Route index element={<Dashboard />} />
           <Route path='login' element={<Login />} />
           <Route path='register' element={<Register />} />
           <Route path='verification' element={<Verification />} />
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='reset-password' element={<ResetPassword />} />
+          <Route path='movie/:movieId' element={<SingleMovie />} />
         </Route>
       </Routes>
     </div>

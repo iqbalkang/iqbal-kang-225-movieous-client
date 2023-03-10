@@ -271,7 +271,7 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
       </div>
       {/* Right side */}
       <div className='space-y-4'>
-        <PosterUploader onChange={handleOnChange} selectedPoster={selectedPoster} className='h-56' />
+        <PosterUploader onChange={handleOnChange} selectedPoster={selectedPoster} className='' />
         <Geners openModal={toggleGenresModal} genre={movieInfo.genre} />
         <Select label='type' name='type' options={typeOptions} value={type} onChange={handleOnChange} />
         <Select label='language' name='language' options={languageOptions} value={language} onChange={handleOnChange} />

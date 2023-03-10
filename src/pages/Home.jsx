@@ -5,13 +5,11 @@ import Navbar from '../components/Navbar'
 import useAuth from '../hooks/useAuth'
 
 const Home = () => {
-  const ctx = useAuth()
-  // console.log(ctx)
   return (
-    <section className='flex flex-col h-screen min-h-screen'>
+    <section className='flex flex-col min-h-screen'>
       <Navbar />
 
-      <main className='flex-1'>
+      <main className='flex-1 flex flex-col justify-center items-center'>
         <Container>
           <Outlet />
         </Container>

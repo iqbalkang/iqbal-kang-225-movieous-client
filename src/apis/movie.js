@@ -89,4 +89,42 @@ const deleteMovie = async id => {
   }
 }
 
-export { postTrailer, postMovie, getMovies, getMovie, updateMovie, searchMovie, deleteMovie }
+const getTopRated = async type => {
+  let url = 'movie/top-rated'
+  if (type) url = `${url}?type=${type}`
+  try {
+    const { data } = await customFetch.get(url)
+    // console.log(data)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+const getLatestMovies = async type => {
+  try {
+    const { data } = await customFetch.get(`movie/lastest-uploads`)
+    // console.log(data)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export {
+  postTrailer,
+  postMovie,
+  getMovies,
+  getMovie,
+  updateMovie,
+  searchMovie,
+  deleteMovie,
+  getTopRated,
+  getLatestMovies,
+}

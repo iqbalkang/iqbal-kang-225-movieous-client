@@ -13,7 +13,7 @@ const PosterUploader = ({ onChange, selectedPoster, className }) => {
       />
       <label htmlFor='poster' className='cursor-pointer text-grayish'>
         {selectedPoster ? (
-          <img src={selectedPoster} className={`rounded ${className}`} />
+          <img src={selectedPoster} className={`rounded aspect-square object-cover ${className}`} />
         ) : (
           <div className='border border-grayish border-dashed h-36 flex justify-center items-center rounded'>
             <p>Select Poster</p>
