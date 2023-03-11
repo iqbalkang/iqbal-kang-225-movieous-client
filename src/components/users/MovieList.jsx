@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getTopRated } from '../../apis/movie'
-import { AiFillStar } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import Movie from './Movie'
 
 const MovieList = ({ type }) => {
   const [results, setResults] = useState([])
@@ -10,6 +9,8 @@ const MovieList = ({ type }) => {
     const { data, error } = await getTopRated(type)
     setResults(data.movies)
   }
+
+  // console.log(results)
 
   useEffect(() => {
     fetchTopRatedMovies(type)
@@ -26,23 +27,3 @@ const MovieList = ({ type }) => {
 }
 
 export default MovieList
-
-const Movie = ({ id, title, poster, reviews: { ratingAvg } }) => {
-  // console.log
-  return (
-    <Link to={id}>
-      <img src={poster} alt='' className='aspect-square mb-2 rounded' />
-      <h3 className='capitalize'>{title}</h3>
-      <div className='flex items-center gap-1 text-accent dark:text-custom-yellow text-sm capitalize'>
-        {ratingAvg ? (
-          <>
-            <span>7.5</span>
-            <AiFillStar />
-          </>
-        ) : (
-          'no reviews'
-        )}
-      </div>
-    </Link>
-  )
-}

@@ -13,6 +13,6 @@ const UpNext = ({ upNextMovies }) => {
 
 export default UpNext
 
-const UpNextMovie = ({ poster, title }) => {
-  return <img src={poster} alt={title} />
+const UpNextMovie = ({ responsivePosters, title }) => {
+  return <img src={responsivePosters[0]} alt={title} />
 }

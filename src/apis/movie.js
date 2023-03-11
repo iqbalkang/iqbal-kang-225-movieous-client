@@ -117,6 +117,30 @@ const getLatestMovies = async type => {
   }
 }
 
+const getSingleMovie = async id => {
+  try {
+    const { data } = await customFetch.get(`movie/single-movie/${id}`)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+const getRelatedMovies = async id => {
+  try {
+    const { data } = await customFetch.get(`movie/related-movies/${id}`)
+    return { data }
+  } catch (error) {
+    console.log(error)
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
 export {
   postTrailer,
   postMovie,
@@ -127,4 +151,6 @@ export {
   deleteMovie,
   getTopRated,
   getLatestMovies,
+  getSingleMovie,
+  getRelatedMovies,
 }
