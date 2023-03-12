@@ -38,7 +38,7 @@ const Navbar = () => {
       <Container>
         <div className='flex justify-between items-center'>
           <Link to='/'>
-            <img src={logo} alt='movieous logo' className='h-6 sm:h-8 md:h-10' />
+            <img src={logo} alt='movieous logo' className='h-7 sm:h-8 md:h-10' />
           </Link>
 
           <div className='flex items-center gap-4'>

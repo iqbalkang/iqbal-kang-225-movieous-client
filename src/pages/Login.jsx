@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AuthCard from '../components/AuthCard'
 import FormRow from '../components/FormRow'
 import VerticalContainer from '../components/VerticalContainer'
@@ -11,6 +11,7 @@ import SubmitButton from '../components/SubmitButton'
 
 const Login = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { renderNotification } = useNotification()
   const { signIn, authInfo } = useAuth()
@@ -41,6 +42,7 @@ const Login = () => {
   useEffect(() => {
     // if (user) navigate('/', { replace: true })
     if (user) navigate('/')
+    // if (user) console.log(location.state)
     if (error) renderNotification('error', error)
   }, [user, error])
 

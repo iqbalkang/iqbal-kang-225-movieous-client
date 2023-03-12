@@ -1,7 +1,7 @@
 import { postLogin, postVerify } from '../apis/requests'
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../utils/localStorage'
 
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, createContext, useEffect } from 'react'
 
 const AuthContext = createContext()
@@ -16,6 +16,7 @@ const initialState = {
 const AuthProvider = ({ children }) => {
   const [authInfo, setAuthInfo] = useState(initialState)
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     setAuthInfo({ ...initialState, user: getLocalStorage('user') })
@@ -28,9 +29,10 @@ const AuthProvider = ({ children }) => {
 
     if (error) return setAuthInfo({ ...initialState, isLoading: false, error: error.message })
 
-    navigate('/', { replace: true })
     setAuthInfo({ ...initialState, isLoading: false, user: data.user })
     setLocalStorage('user', data.user)
+    if (data.user?.isAdmin) return navigate('/', { replace: true })
+    navigate(location.state, { replace: true })
   }
 
   const verifyEmail = async userInfo => {

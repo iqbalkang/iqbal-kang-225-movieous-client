@@ -1,30 +1,58 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getSingleMovie } from '../../apis/movie'
 import ActorProfileModal from '../modals/ActorProfileModal'
 import RatingModal from '../modals/RatingModal'
 import RelatedMovies from './RelatedMovies'
+import useAuth from '../../hooks/useAuth'
+import { getOwnerReview } from '../../apis/review'
+import { AiFillStar } from 'react-icons/ai'
+import CustomButton from './CustomButton'
 
 const SingleMovie = () => {
   const { movieId } = useParams()
+  const navigate = useNavigate()
+  const { authInfo } = useAuth()
+
   const [movie, setMovie] = useState(null)
   const [selectedProfileId, setSelectedProfileId] = useState(null)
   const [profileModal, setProfileModal] = useState(false)
-  const [ratingModal, setRatingModal] = useState(true)
+  const [ratingModal, setRatingModal] = useState(false)
+  const [ownerReview, setOwnerReview] = useState(null)
+
+  // console.log(ownerReview)
+
+  const { user } = authInfo
 
   const fetchSingleMovie = async () => {
     const { data, error } = await getSingleMovie(movieId)
     setMovie(data.movie)
   }
 
+  const fetchOwnerReview = async () => {
+    const { data, error } = await getOwnerReview(movieId)
+    setOwnerReview(data?.review)
+  }
+  const updateRating = (reviews, ownerReview) => {
+    setMovie({ ...movie, reviews })
+    fetchOwnerReview()
+    setOwnerReview(ownerReview)
+  }
+
   useEffect(() => {
     fetchSingleMovie()
-  }, [movieId])
+    if (user) fetchOwnerReview()
+  }, [movieId, user])
 
   if (!movie) return <p className='text-center animate-pulse'>please wait...</p>
 
   const toggleProfileModal = () => setProfileModal(prevState => !prevState)
   const toggleRatingModal = () => setRatingModal(prevState => !prevState)
+
+  const handleReviewButtonClick = () => {
+    if (!user) return navigate('/login', { state: `/movie/${movieId}` })
+    toggleRatingModal()
+  }
 
   const handleProfileClick = id => {
     toggleProfileModal()
@@ -78,13 +106,13 @@ const SingleMovie = () => {
     <section className='grid lg:grid-cols-[4fr,1fr] gap-2 py-4'>
       <div className=' text-blackish dark:text-grayish'>
         <video poster={poster} controls src={trailer}></video>
-        <div className='flex justify-between items-center text-accent dark:text-custom-yellow '>
-          <h3 className='text-2xl font-semibold capitalize'>{title}</h3>
+        <div className='flex justify-between py-2'>
+          <h3 className='text-2xl font-semibold capitalize text-accent dark:text-custom-yellow'>{title}</h3>
 
-          <div className='flex flex-col items-end text-xs'>
-            <p>no reviews</p>
-            <Link>0 reviews</Link>
-            <button>rate this movie</button>
+          <div className='flex gap-2 text-xs'>
+            <TotalRating reviews={movie.reviews} movieId={movieId} title={movie.title} />
+            <OwnerRating onClick={handleReviewButtonClick} ownerReview={ownerReview} />
+            {/* <button onClick={handleReviewButtonClick}>rate this movie</button> */}
           </div>
         </div>
         <p>{storyLine}</p>
@@ -114,7 +142,13 @@ const SingleMovie = () => {
         </div>
 
         <ActorProfileModal visible={profileModal} closeModal={toggleProfileModal} selectedProfile={selectedProfileId} />
-        <RatingModal visible={ratingModal} closeModal={toggleRatingModal} />
+        <RatingModal
+          visible={ratingModal}
+          closeModal={toggleRatingModal}
+          movieId={movieId}
+          onSubmit={updateRating}
+          initialState={ownerReview}
+        />
       </div>
 
       <RelatedMovies movieId={movieId} />
@@ -124,13 +158,49 @@ const SingleMovie = () => {
 
 export default SingleMovie
 
-const CustomButton = ({ children, onClick, notButton = false }) => {
-  const commonClasses = `text-accent dark:text-custom-yellow capitalize `
-  if (notButton) return <p className={commonClasses}>{children}</p>
+const TotalRating = ({ reviews, movieId, title }) => {
+  const { ratingAvg, reviewCount } = reviews
   return (
-    <button className={commonClasses + 'hover:underline'} onClick={onClick}>
-      {children}
-    </button>
+    <Link to={`/movie/reviews/${movieId}?title=${title}`} className='flex flex-col items-center'>
+      <h2 className='text-blackish dark:text-grayish capitalize'>total rating</h2>
+      <button className='flex hover:bg-offwhite dark:hover:bg-blackish px-2 rounded'>
+        <AiFillStar size={24} className='text-custom-yellow' />
+        <div>
+          <p>
+            <span className='text-xl toggle-text'>{ratingAvg || 0}</span>/10
+          </p>
+          <p>
+            <span className='toggle-text font-semibold'>{reviewCount || 0}</span>
+            {reviewCount > 1 ? ' reviews' : ' review'}
+          </p>
+        </div>
+      </button>
+    </Link>
+  )
+}
+
+const OwnerRating = ({ onClick, ownerReview }) => {
+  const renderSpanText = () => {
+    if (!ownerReview) return <span className='text-[#E06C9F] text-lg font-semibold'>Rate</span>
+    else
+      return (
+        <>
+          <span className='text-xl toggle-text'>{ownerReview.rating}</span>
+          <span>/10</span>
+        </>
+      )
+  }
+
+  return (
+    <div className='flex flex-col items-center'>
+      <h2 className='text-blackish dark:text-grayish capitalize'>your rating</h2>
+      <button onClick={onClick} className='flex hover:bg-offwhite dark:hover:bg-blackish px-2 rounded'>
+        <AiFillStar size={24} className='text-[#E06C9F]' />
+        <div>
+          <p>{renderSpanText()}</p>
+        </div>
+      </button>
+    </div>
   )
 }
 

@@ -10,6 +10,7 @@ import AdminRouter from './pages/AdminRouter'
 import { useEffect } from 'react'
 import Dashboard from './pages/Dashboard'
 import SingleMovie from './components/users/SingleMovie'
+import Reviews from './pages/Reviews'
 
 function App() {
   const { authInfo } = useAuth()
@@ -32,6 +33,7 @@ function App() {
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='reset-password' element={<ResetPassword />} />
           <Route path='movie/:movieId' element={<SingleMovie />} />
+          <Route path='movie/reviews/:movieId' element={<Reviews />} />
         </Route>
       </Routes>
     </div>

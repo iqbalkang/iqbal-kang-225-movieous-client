@@ -152,6 +152,7 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
       if (err) return renderNotification('error', err)
       if (data) renderNotification('success', 'Movie updated successfully')
       await fetchMovies()
+      await fetchLatestMovies(4)
       return forceCloseModals()
     }
 

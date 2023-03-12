@@ -10,8 +10,6 @@ const MovieList = ({ type }) => {
     setResults(data.movies)
   }
 
-  // console.log(results)
-
   useEffect(() => {
     fetchTopRatedMovies(type)
   }, [])

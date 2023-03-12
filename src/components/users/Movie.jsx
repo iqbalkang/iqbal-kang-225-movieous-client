@@ -2,7 +2,7 @@ import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 
-const Movie = ({ id, title, poster, responsivePosters, reviews: { ratingAvg } }) => {
+const Movie = ({ id, title, poster, responsivePosters, reviews: { ratingAvg, reviewCount } }) => {
   const renderImage = responsivePosters ? responsivePosters[0] : poster
   return (
     <Link to={`/movie/${id}`}>
@@ -11,8 +11,11 @@ const Movie = ({ id, title, poster, responsivePosters, reviews: { ratingAvg } })
       <div className='flex items-center gap-1 text-accent dark:text-custom-yellow text-sm capitalize'>
         {ratingAvg ? (
           <>
-            <span>7.5</span>
             <AiFillStar />
+            <span>{ratingAvg}</span>
+            <span className='text-grayish'>
+              ({reviewCount} {reviewCount > 1 ? ' reviews' : ' review'})
+            </span>
           </>
         ) : (
           'no reviews'
