@@ -1,7 +1,6 @@
 import axios from 'axios'
-
 const customFetch = axios.create({
-  baseURL: 'http://127.0.0.1:8080/api/v1',
+  baseURL: 'https://movieous-server-o28i8.ondigitalocean.app//api/v1',
 })
 
 export default customFetch
