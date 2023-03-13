@@ -8,6 +8,7 @@ import useAuth from '../../hooks/useAuth'
 import { getOwnerReview } from '../../apis/review'
 import { AiFillStar } from 'react-icons/ai'
 import CustomButton from './CustomButton'
+import { formattName } from '../../utils/formatName'
 
 const SingleMovie = () => {
   const { movieId } = useParams()
@@ -107,7 +108,7 @@ const SingleMovie = () => {
       <div className=' text-blackish dark:text-grayish'>
         <video poster={poster} controls src={trailer}></video>
         <div className='flex justify-between py-2'>
-          <h3 className='text-2xl font-semibold capitalize text-accent dark:text-custom-yellow'>{title}</h3>
+          <h3 className=' text-lg md:text-2xl font-semibold capitalize text-accent dark:text-custom-yellow'>{title}</h3>
 
           <div className='flex gap-2 text-xs'>
             <TotalRating reviews={movie.reviews} movieId={movieId} title={movie.title} />
@@ -138,7 +139,7 @@ const SingleMovie = () => {
 
         <div className='my-4'>
           <h2 className='text-2xl font-bold dark:text-white mb-1'>Top cast</h2>
-          <div className='flex gap-2 flex-wrap'>{renderTopCast}</div>
+          <div className='flex gap-6 md:gap-2 flex-wrap justify-center'>{renderTopCast}</div>
         </div>
 
         <ActorProfileModal visible={profileModal} closeModal={toggleProfileModal} selectedProfile={selectedProfileId} />
@@ -169,7 +170,7 @@ const TotalRating = ({ reviews, movieId, title }) => {
           <p>
             <span className='text-xl toggle-text'>{ratingAvg || 0}</span>/10
           </p>
-          <p>
+          <p className='flex gap-1'>
             <span className='toggle-text font-semibold'>{reviewCount || 0}</span>
             {reviewCount > 1 ? ' reviews' : ' review'}
           </p>
@@ -226,8 +227,9 @@ const TopCast = ({ roleAs, profile, handleProfileClick }) => {
       <button
         className='text-black dark:text-white capitalize hover:underline'
         onClick={handleProfileClick.bind(null, id)}
+        title={name}
       >
-        {name}
+        {formattName(name)}
       </button>
       <p className='capitalize text-sm'>{roleAs}</p>
     </div>
