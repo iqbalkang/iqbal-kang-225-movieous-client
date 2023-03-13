@@ -19,14 +19,12 @@ const MoviesProvider = ({ children }) => {
 
   const fetchMovies = async () => {
     const { data, error } = await getMovies(currentPage, limit)
-    // console.log(data)
     if (!data.movies.length) return setCurrentPage(currentPage - 1)
     setMovies(data.movies)
   }
 
   const fetchLatestMovies = async numberOfMovies => {
     const { data, error } = await getMovies(0, numberOfMovies)
-    // console.log(data)
     setRecentUploads(data.movies)
   }
 

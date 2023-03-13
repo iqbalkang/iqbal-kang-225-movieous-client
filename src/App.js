@@ -11,6 +11,8 @@ import { useEffect } from 'react'
 import Dashboard from './pages/Dashboard'
 import SingleMovie from './components/users/SingleMovie'
 import Reviews from './pages/Reviews'
+import UserMovieSearch from './pages/UserMovieSearch'
+import AllMovies from './components/users/AllMovies'
 
 function App() {
   const { authInfo } = useAuth()
@@ -34,6 +36,8 @@ function App() {
           <Route path='reset-password' element={<ResetPassword />} />
           <Route path='movie/:movieId' element={<SingleMovie />} />
           <Route path='movie/reviews/:movieId' element={<Reviews />} />
+          <Route path='movie/search' element={<UserMovieSearch />} />
+          <Route path='movie/all' element={<AllMovies />} />
         </Route>
       </Routes>
     </div>

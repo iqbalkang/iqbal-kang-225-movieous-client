@@ -48,7 +48,7 @@ const RecentUploads = () => {
 
   return (
     <Box className='col-span-2'>
-      <h1 className='text-lg font-bold capitalize'>recent uploads</h1>
+      <h2 className='text-lg font-bold capitalize'>recent uploads</h2>
 
       <div className='divide-black dark:divide-white divide-y-2'>{renderMovies}</div>
 

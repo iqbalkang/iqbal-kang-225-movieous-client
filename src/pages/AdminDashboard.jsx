@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getAppInfo } from '../apis/admin'
 import AppInfoBox from '../components/admin/AppInfoBox'
+import MostRated from '../components/admin/MostRated'
 import RecentUploads from '../components/admin/RecentUploads'
 
 const AdminDashboard = () => {
@@ -24,6 +25,7 @@ const AdminDashboard = () => {
       <AppInfoBox title='total users' value={users} />
 
       <RecentUploads />
+      <MostRated />
     </div>
   )
 }

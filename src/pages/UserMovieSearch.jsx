@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { searchMovie } from '../apis/movie'
-import Movie from '../components/Movie'
+import { searchMovieUser } from '../apis/movie'
+import Movie from '../components/users/Movie'
+// import { searchMovie } from '../apis/movie'
+// import Movie from '../components/Movie'
 import useNotification from '../hooks/useNotification'
 
-const MovieSearch = () => {
+const UserMovieSearch = () => {
   const { renderNotification } = useNotification()
 
   const [searchParams] = useSearchParams()
@@ -13,7 +15,8 @@ const MovieSearch = () => {
   const [searchedMovies, setSearchedMovies] = useState([])
 
   const fetchSearchedMovies = async () => {
-    const { data, error } = await searchMovie(title)
+    const { data, error } = await searchMovieUser(title)
+    console.log(data)
     if (!data.movies.length) return renderNotification('warning', 'No record was found')
     setSearchedMovies(data.movies)
   }
@@ -22,9 +25,13 @@ const MovieSearch = () => {
     fetchSearchedMovies()
   }, [title])
 
-  const renderMovies = () => searchedMovies.map(movie => <Movie key={movie._id} movie={movie} />)
+  const renderMovies = () => searchedMovies.map(movie => <Movie key={movie.id} {...movie} />)
 
-  return <div className='divide-black dark:divide-white divide-y-2'>{renderMovies()}</div>
+  return (
+    <div className='h-full flex-1 py-2 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 gap-y-4'>
+      {renderMovies()}
+    </div>
+  )
 }
 
-export default MovieSearch
+export default UserMovieSearch

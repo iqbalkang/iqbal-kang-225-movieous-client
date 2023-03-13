@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../images/logo.png'
-// import { HiOutlineSun, HiSun } from 'react-icons/hi'
 import Container from './Container'
 import Input from './Input'
 import useTheme from '../hooks/useTheme'
@@ -19,6 +18,14 @@ const Navbar = () => {
   const handleLogout = () => {
     logout()
     navigate('/')
+  }
+
+  const handleSearchSubmit = query => {
+    navigate(`/movie/search?title=${query}`)
+  }
+
+  const handleSearchReset = () => {
+    navigate(-1)
   }
 
   // const renderThemeIcon = () => (darkMode ? <HiOutlineSun size={26} /> : <HiSun size={26} />)
@@ -42,9 +49,11 @@ const Navbar = () => {
           </Link>
 
           <div className='flex items-center gap-4'>
-            {/* <button onClick={toggleTheme}> {renderThemeIcon()} </button> */}
+            <Link to='/movie/all' className='capitalize'>
+              view all
+            </Link>
             <ThemeToggler />
-            <Search placeholder='search' />
+            <Search placeholder='search' onReset={handleSearchReset} onSubmit={handleSearchSubmit} />
             {renderAuthButton}
           </div>
         </div>

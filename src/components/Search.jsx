@@ -21,7 +21,7 @@ const Search = ({ placeholder, onSubmit, onReset }) => {
     <form onSubmit={handleOnSubmit} className='relative'>
       <Input
         placeholder={placeholder}
-        className='placeholder:capitalize md:focus:w-80'
+        className='placeholder:capitalize md:focus:w-80 transition'
         value={value}
         onchange={handleOnChange}
       />
