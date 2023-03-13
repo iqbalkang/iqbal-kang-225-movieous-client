@@ -139,7 +139,7 @@ const SingleMovie = () => {
 
         <div className='my-4'>
           <h2 className='text-2xl font-bold dark:text-white mb-1'>Top cast</h2>
-          <div className='flex gap-6 md:gap-2 flex-wrap justify-center'>{renderTopCast}</div>
+          <div className='flex gap-6 md:gap-2 flex-wrap justify-center md:justify-start'>{renderTopCast}</div>
         </div>
 
         <ActorProfileModal visible={profileModal} closeModal={toggleProfileModal} selectedProfile={selectedProfileId} />
