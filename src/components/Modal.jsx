@@ -12,7 +12,7 @@ const Modal = ({ children, closeModal, className = '' }) => {
   return ReactDOM.createPortal(
     <div
       id='backdrop'
-      className='fixed inset-0 flex flex-col justify-center items-center bg-body bg-opacity-50 backdrop-blur-sm z-10 cursor-pointer'
+      className='fixed inset-0  flex flex-col justify-center items-center bg-body bg-opacity-50 backdrop-blur-sm z-10 cursor-pointer'
       onMouseDown={handleModal}
     >
       <div className={innerDivClasses}>{children}</div>
