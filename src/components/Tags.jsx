@@ -50,7 +50,7 @@ const Tags = ({ updateTags, tags }) => {
     updateTags(enteredTags)
   }, [enteredTags])
 
-  const renderTags = tags.map(tag => <Tag key={tag} text={tag} deleteTag={deleteTag} />)
+  const renderTags = tags?.map(tag => <Tag key={tag} text={tag} deleteTag={deleteTag} />)
 
   return (
     <div>
