@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import Modal from '../Modal'
 import { AiFillStar } from 'react-icons/ai'
+import useAuth from '../../hooks/useAuth'
 
 import SubmitButton from '../SubmitButton'
 import RatingStars from '../users/RatingStars'
 import { postReview, updateReview } from '../../apis/review'
 import useNotification from '../../hooks/useNotification'
+import { Link } from 'react-router-dom'
 
 const RatingModal = ({ visible, closeModal, movieId, onSubmit, initialState }) => {
-  // console.log(initialState.reviewId)
   const modalClasses = 'h-fit max-w-md rating flex flex-col items-center dark:text-offwhite'
   const spanClasses = 'mt-4 mb-1 capitalize text-sm text-accent dark:text-custom-yellow'
   const textAreaClasess =
     'p-1 w-full bg-transparent first-letter:capitalize outline-none border-grayish border h-20 toggle-text focus:border-black dark:focus:border-white peer resize-none'
 
   const { renderNotification } = useNotification()
+  const { authInfo } = useAuth()
+  const { isVerified } = authInfo.user || {}
 
   const [loading, setLoading] = useState(false)
+  const [showVerificationLink, setShowVerificationLink] = useState(false)
   const [review, setReview] = useState({
     comment: '',
     rating: null,
@@ -27,6 +31,11 @@ const RatingModal = ({ visible, closeModal, movieId, onSubmit, initialState }) =
 
   const handleOnSubmit = async e => {
     e.preventDefault()
+    if (!isVerified) {
+      setShowVerificationLink(true)
+      return renderNotification('error', 'Account is not verified')
+    }
+
     setLoading(true)
 
     if (initialState) {
@@ -47,6 +56,16 @@ const RatingModal = ({ visible, closeModal, movieId, onSubmit, initialState }) =
     onSubmit(data.reviews, review)
     renderNotification('success', data.message)
     closeModal()
+  }
+
+  const renderVerificationLink = () => {
+    return (
+      showVerificationLink && (
+        <Link to='/verification' className='text-custom-yellow mt-2  text-xs text-center block hover:underline'>
+          Verify account to proceed
+        </Link>
+      )
+    )
   }
 
   useEffect(() => {
@@ -76,6 +95,7 @@ const RatingModal = ({ visible, closeModal, movieId, onSubmit, initialState }) =
           ></textarea>
           <SubmitButton text='rate' uploading={loading} />
         </form>
+        {renderVerificationLink()}
       </div>
     </Modal>
   )

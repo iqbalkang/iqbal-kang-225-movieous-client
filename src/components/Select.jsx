@@ -10,6 +10,7 @@ const Select = ({ options, value, onChange, name }) => {
   return (
     <div>
       <select name={name} id={name} value={value} onChange={onChange} className={selectStyles + renderSelectClasses}>
+        <option value=''>{name}</option>
         {renderOptions}
       </select>
     </div>

@@ -13,9 +13,11 @@ import validateUserInfo from '../utils/validateInputs'
 const Register = () => {
   const navigate = useNavigate()
   const { renderNotification } = useNotification()
-  const {
-    authInfo: { user },
-  } = useAuth()
+  const { register, authInfo } = useAuth()
+
+  // console.log(user)
+
+  const { user, isLoading, error } = authInfo
 
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -36,14 +38,14 @@ const Register = () => {
     const { valid, err } = validateUserInfo(userInfo)
     if (!valid) return renderNotification('error', err)
 
-    const { data, error } = await postRegister(userInfo)
+    const { status, user, message } = await register(userInfo)
 
-    if (error) return renderNotification('error', error.message)
+    // if (error) return renderNotification('error', error.message)
 
-    if (data.status === 'success') {
-      renderNotification('success', data.message)
+    if (status === 'success') {
+      renderNotification('success', message)
       navigate('/verification', {
-        state: data,
+        state: user,
         replace: true,
       })
     }
@@ -60,7 +62,7 @@ const Register = () => {
           <FormRow placeholder='John Doe' name='name' value={name} onchange={changeHandler} />
           <FormRow placeholder='johndoe@gmail.com' name='email' value={email} onchange={changeHandler} />
           <FormRow placeholder='******' type='password' name='password' value={password} onchange={changeHandler} />
-          <SubmitButton text='register' />
+          <SubmitButton uploading={isLoading} text='register' />
           <div className='flex justify-between'>
             <Link to='/forgot-password' className='hover:text-accent duration-200'>
               Forgot password

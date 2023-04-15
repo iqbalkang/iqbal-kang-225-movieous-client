@@ -42,7 +42,6 @@ const ActorForm = ({ closeModal, selectedProfile, handleEditSubmit }) => {
     for (let key in actorInfo) {
       if (!actorInfo[key]) return renderNotification('error', 'Please fill in the form')
       setLoading(true)
-      console.log(key, actorInfo[key])
       formData.append(key, actorInfo[key])
     }
 

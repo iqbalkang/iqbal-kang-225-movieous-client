@@ -67,4 +67,23 @@ const postResetPassword = async info => {
   }
 }
 
-export { postRegister, postVerify, postLogin, postForgotPassword, postVerifyResetPasswordToken, postResetPassword }
+const postResendVerificationToken = async body => {
+  try {
+    const { data } = await customFetch.post('/auth//resend-token', body)
+    return { data }
+  } catch (error) {
+    const { response } = error
+    if (response?.data) return { error: response.data }
+    return { error }
+  }
+}
+
+export {
+  postRegister,
+  postVerify,
+  postLogin,
+  postForgotPassword,
+  postVerifyResetPasswordToken,
+  postResetPassword,
+  postResendVerificationToken,
+}

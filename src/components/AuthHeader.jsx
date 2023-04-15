@@ -56,7 +56,7 @@ const AuthHeader = () => {
             Create <IoAddOutline className='pointer-events-none' />
           </button>
           {createButton && (
-            <div className='absolute right-0 top-[110%] bg-gray-800 w-[100px]' ref={menuRef}>
+            <div className='absolute right-0 top-[110%] bg-gray-500 text-offwhite w-[100px] z-30' ref={menuRef}>
               <button
                 className='py-1 border-b border-grayish w-full hover:bg-gray-500 hover:text-white'
                 onClick={handleActorModal}

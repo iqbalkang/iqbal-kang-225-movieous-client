@@ -33,7 +33,7 @@ const defaultMovieInfo = {
   type: '',
   language: '',
   genre: [],
-  poster: {},
+  poster: null,
   trailer: {},
 }
 
@@ -148,7 +148,7 @@ const MovieForm = ({ trailer, videoSelected, selectedMovie, toggleVideoStates })
     if (selectedMovie) {
       const { data, error: err } = await updateMovie(selectedMovie.id, formData)
       setUploading(false)
-      console.log(err)
+
       if (err) return renderNotification('error', err)
       if (data) renderNotification('success', 'Movie updated successfully')
       await fetchMovies()

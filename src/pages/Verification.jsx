@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import VerticalContainer from '../components/VerticalContainer'
 import SubmitButton from '../components/SubmitButton'
-import { postVerify } from '../apis/requests'
+import { postResendVerificationToken, postVerify } from '../apis/requests'
 import useNotification from '../hooks/useNotification'
 import useAuth from '../hooks/useAuth'
 
@@ -18,7 +18,7 @@ const Verification = () => {
   const { verifyEmail, authInfo } = useAuth()
   const { isLoading, error, success, user } = authInfo
 
-  const { userId } = location.state?.user
+  const { userId } = location.state?.user || {}
 
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(''))
   const [activeOtpIndex, setActiveOtpIndex] = useState(0)
@@ -34,7 +34,6 @@ const Verification = () => {
     newOtp[activeOtpIndex] = value.substring(0, 1)
     setOtp(newOtp)
 
-    console.log(otp)
     if (!value) return setActiveOtpIndex(activeIndex - 1)
 
     if (activeOtpIndex >= OTP_LENGTH - 1) return
@@ -60,15 +59,21 @@ const Verification = () => {
     if (!isValidOTP(otp)) return renderNotification('error', 'invalid otp')
 
     const formattedOTP = otp.join('')
-    const info = { userId, otp: formattedOTP }
+    const info = { userId: user.userId, otp: formattedOTP }
 
     await verifyEmail(info)
+  }
+
+  const handleResendOTP = async () => {
+    const { data, error } = await postResendVerificationToken({ userId: user.userId })
+    if (error) return renderNotification('error', error.message)
+    renderNotification('success', data.message)
   }
 
   useEffect(() => {
     if (error) return renderNotification('error', error)
 
-    if (user) {
+    if (user && user.isVerified) {
       renderNotification('success', success)
       navigate('/')
     }
@@ -97,9 +102,12 @@ const Verification = () => {
           })}
         </div>
         <SubmitButton onClick={handleSubmit} uploading={isLoading} text='verify' />
-        <Link to='/' className='mt-2 inline-block'>
-          I don't have OTP
-        </Link>
+        <div className='flex justify-between'>
+          <button onClick={handleResendOTP}>I don't have OTP</button>
+          <Link to='/' className='mt-2 inline-block'>
+            Verify later
+          </Link>
+        </div>
       </div>
     </VerticalContainer>
   )
