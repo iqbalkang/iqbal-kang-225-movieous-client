@@ -16,6 +16,9 @@ module.exports = {
         ['custom-yellow']: '#FCD757',
       },
     },
+    fontFamily: {
+      sans: ['Roboto', 'Helvetica', 'ui-sans-serif', 'system-ui'],
+    },
   },
   plugins: [],
-}
+};
