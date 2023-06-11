@@ -1,78 +1,76 @@
-import React, { useEffect, useState } from 'react'
-import CustomButton from '../components/users/CustomButton'
-import { AiFillStar } from 'react-icons/ai'
-import { deleteReview, getReviews } from '../apis/review'
-import { useParams, useSearchParams } from 'react-router-dom'
-import useAuth from '../hooks/useAuth'
-import useNotification from '../hooks/useNotification'
-import { MdDeleteOutline, MdEdit, MdOutlineModeEditOutline } from 'react-icons/md'
-import RatingModal from '../components/modals/RatingModal'
-import ConfirmModal from '../components/modals/ConfirmModal'
+import React, { useEffect, useState } from 'react';
+import CustomButton from '../components/users/CustomButton';
+import { AiFillStar } from 'react-icons/ai';
+import { deleteReview, getReviews } from '../apis/review';
+import { useParams, useSearchParams } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
+import useNotification from '../hooks/useNotification';
+import { MdDeleteOutline, MdEdit, MdOutlineModeEditOutline } from 'react-icons/md';
+import RatingModal from '../components/modals/RatingModal';
+import ConfirmModal from '../components/modals/ConfirmModal';
 
 const Reviews = () => {
-  const { movieId } = useParams()
-  const { renderNotification } = useNotification()
+  const { movieId } = useParams();
+  const { renderNotification } = useNotification();
 
-  const { authInfo } = useAuth()
-  const { user } = authInfo
+  const { authInfo } = useAuth();
+  const { user } = authInfo;
 
-  const [searchParams, setsearchParams] = useSearchParams()
-  const title = searchParams.get('title')
+  const [searchParams, setsearchParams] = useSearchParams();
+  const title = searchParams.get('title');
 
-  const [reviews, setReviews] = useState([])
-  const [myReview, setMyReview] = useState(null)
-  const [ratingModal, setRatingModal] = useState(false)
-  const [confirmModal, setConfirmModal] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [reviews, setReviews] = useState([]);
+  const [myReview, setMyReview] = useState(null);
+  const [ratingModal, setRatingModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchMovieReviews = async () => {
-    const { data, error } = await getReviews(movieId)
-    setReviews(data.reviews)
-  }
+    const { data, error } = await getReviews(movieId);
+    setReviews(data.reviews);
+  };
 
-  const toggleRatingModal = () => setRatingModal(prevState => !prevState)
-  const toggleConfirmModal = () => setConfirmModal(prevState => !prevState)
+  const toggleRatingModal = () => setRatingModal((prevState) => !prevState);
+  const toggleConfirmModal = () => setConfirmModal((prevState) => !prevState);
 
   const handleOnSubmit = (_, undefined, rev) => {
-    const { reviewId, rating, comment } = rev
+    const { reviewId, rating, comment } = rev;
 
-    const updatedReviews = reviews.map(review => {
-      if (review.reviewId === rev._id) return { ...review, rating, comment }
-      else return review
-    })
+    const updatedReviews = reviews.map((review) => {
+      if (review.reviewId === rev._id) return { ...review, rating, comment };
+      else return review;
+    });
 
-    setReviews(updatedReviews)
-    setMyReview({ ...myReview, rating, comment })
-  }
+    setReviews(updatedReviews);
+    setMyReview({ ...myReview, rating, comment });
+  };
 
   const handleOnReviewDelete = async () => {
-    setLoading(true)
-    const { data, error } = await deleteReview(myReview.reviewId)
+    setLoading(true);
+    const { data, error } = await deleteReview(myReview.reviewId);
 
-    if (error) return renderNotification('error', error?.message)
-    renderNotification('success', data.message)
-    setLoading(false)
+    if (error) return renderNotification('error', error?.message);
+    renderNotification('success', data.message);
+    setLoading(false);
 
-    const updatedReviews = reviews.filter(review => review.reviewId !== myReview.reviewId)
-    setMyReview(null)
-    setReviews(updatedReviews)
-    toggleConfirmModal()
-  }
-
-  console.log(reviews)
+    const updatedReviews = reviews.filter((review) => review.reviewId !== myReview.reviewId);
+    setMyReview(null);
+    setReviews(updatedReviews);
+    toggleConfirmModal();
+  };
 
   useEffect(() => {
-    fetchMovieReviews()
-  }, [movieId])
+    fetchMovieReviews();
+  }, [movieId]);
 
   const handleMyReviewClick = () => {
-    if (myReview) return setMyReview(null)
+    if (myReview) return setMyReview(null);
 
-    const ownerReviews = reviews.find(review => review.user.userId === user.userId)
-    if (!ownerReviews) return renderNotification('warning', 'You have not reviewed this movie yet.')
+    const ownerReviews = reviews.find((review) => review.user.userId === user.userId);
+    if (!ownerReviews) return renderNotification('warning', 'You have not reviewed this movie yet.');
 
-    setMyReview(ownerReviews)
-  }
+    setMyReview(ownerReviews);
+  };
 
   const renderReviews = () => {
     if (myReview)
@@ -84,9 +82,13 @@ const Reviews = () => {
           onClick={toggleRatingModal}
           onDelete={toggleConfirmModal}
         />
-      )
-    else return reviews.map(review => <ReviewCard key={review.reviewId} {...review} />)
-  }
+      );
+    else return reviews.map((review) => <ReviewCard key={review.reviewId} {...review} />);
+  };
+
+  const renderNoReviews = () => {
+    return <p className='mt-8'>No reviews yet</p>;
+  };
 
   return (
     <section className='h-full flex-1 py-2'>
@@ -96,7 +98,7 @@ const Reviews = () => {
         </h2>
         {user && <CustomButton onClick={handleMyReviewClick}>{myReview ? 'view all' : 'find my review'}</CustomButton>}
       </div>
-      <div className='divide-grayish divide-y-2 max-w-xl'>{renderReviews()}</div>
+      <div className='divide-grayish divide-y-2 max-w-xl'>{reviews.length ? renderReviews() : renderNoReviews()}</div>
       <RatingModal
         visible={ratingModal}
         closeModal={toggleRatingModal}
@@ -111,12 +113,12 @@ const Reviews = () => {
         loading={loading}
       />
     </section>
-  )
-}
+  );
+};
 
-export default Reviews
+export default Reviews;
 
-const renderNameInitial = name => name.slice(0, 1)
+const renderNameInitial = (name) => name.slice(0, 1);
 
 const ReviewCard = ({ rating, comment, user, myReview, onClick, onDelete }) => {
   return (
@@ -145,5 +147,5 @@ const ReviewCard = ({ rating, comment, user, myReview, onClick, onDelete }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
